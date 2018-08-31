@@ -8,6 +8,7 @@ source activate sen2_batch_processor
 
 # install python packages listed in the file 'requirements.txt'
 while read requirement; do 
-	conda install --yes $requirement
+    # note: the parameter "-c conda-forge" can be rem
+	conda install --yes -c conda-forge $requirement
 done < requirements.txt
 
