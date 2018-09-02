@@ -5,7 +5,7 @@ conda create -n sen2_batch_processor \ #
              -y \ #                       Do not ask for confirmation.
              python=3.6 \
 
-
+# test line
 # activate conda environment
 source activate sen2_batch_processor
 
