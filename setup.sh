@@ -14,5 +14,15 @@ conda create -n sen2_batch_processor -y python=3.6 \
 conda config --add channels conda-forge
 conda install --name sen2_batch_processor -y --file requirements.txt
 
+# download and install sen2cor
+# TODO
+
+# download code-de-tools
+# TODO
+
+# download superres code
+# TODO
+
+
 # activate conda environment
 source activate sen2_batch_processor
