@@ -151,7 +151,7 @@ if $INSTALL_SEN2COR; then
 	fi
 fi
 if $INSTALL_SEN2COR; then
-	if ! [ -z "$(ls -A ${PATH_TARGET_DIR_SEN2COR})" ]; then
+	if [ -d ${PATH_TARGET_DIR_SEN2COR} ] && ! [ -z "$(ls -A ${PATH_TARGET_DIR_SEN2COR})" ]; then
 		echo "  ! Warning: The default installation directory "
 		echo "  ! ${PATH_TARGET_DIR_SEN2COR}/"
 		echo "  ! is not empty. The content of that directory is about to be OVERWRITTEN! "
@@ -178,7 +178,6 @@ if $INSTALL_SEN2COR; then
 	echo '  Note:'
 	echo '  Sen2Cor configuration options and software documentation are available here:'
 	echo '  http://step.esa.int/thirdparties/sen2cor/2.5.5/docs/S2-PDGS-MPC-L2A-SUM-V2.5.5_V2.pdf'
-	echo
 fi
 echo
 echo "  Great. Sen2Cor is good to go."
@@ -231,12 +230,12 @@ if $INSTALL_CODE_DE_TOOLS; then
 			echo
 		fi
 	else
-		echo "  Alright. Let's download and install it."
 		echo 
+		echo "  Alright. Let's download and install it."
 	fi
 fi
 if $INSTALL_CODE_DE_TOOLS; then
-	if ! [ -z "$(ls -A ${PATH_TARGET_DIR_CODE_DE_TOOLS})" ]; then
+	if [ -d ${PATH_TARGET_DIR_CODE_DE_TOOLS} ] && ! [ -z "$(ls -A ${PATH_TARGET_DIR_CODE_DE_TOOLS})" ]; then
 		echo "  ! Warning: The default installation directory "
 		echo "  ! ${PATH_TARGET_DIR_CODE_DE_TOOLS}/"
 		echo "  ! is not empty. The content of that directory is about to be DELETED for a clean installation. "
