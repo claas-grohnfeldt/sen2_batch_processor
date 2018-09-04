@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-PATH_TARGET_DIR_MAIN=$(pwd)
-PATH_DIR_TMP="${PATH_TARGET_DIR_MAIN}/tmp"
-PATH_TARGET_DIR_SEN2COR="${PATH_TARGET_DIR_MAIN}/src/thirdparties/sen2cor"
-PATH_TARGET_DIR_CODE_DE_TOOLS="${PATH_TARGET_DIR_MAIN}/src/thirdparties/code-de-tools"
+#. settings.cfg
+. configure.sh
+
+# PATH_TARGET_DIR_MAIN=$(pwd)
+# PATH_DIR_TMP="${PATH_TARGET_DIR_MAIN}/tmp"
+# PATH_TARGET_DIR_SEN2COR="${PATH_TARGET_DIR_MAIN}/src/thirdparties/sen2cor"
+# PATH_TARGET_DIR_CODE_DE_TOOLS="${PATH_TARGET_DIR_MAIN}/src/thirdparties/code-de-tools"
+# PATH_FILE_NETRC=${HOME}/.netrc
 
 mkdir -p $PATH_DIR_TMP
 mkdir -p $PATH_TARGET_DIR_SEN2COR
@@ -13,7 +17,6 @@ echo "##########################################################################
 echo "# This script is to install the 'sen2_batch_processor' toolbox and its dependencies."
 echo "# Please follow these instructions very carefully."
 echo "#####################################################################################"
-
 
 # new requirement: perl TODO
 
@@ -38,25 +41,27 @@ echo
 echo "  +-------------------------------------"
 echo "  | Setting up a netrc file for login"
 echo "  +-------------------------------------"
-if [ -f ${HOME}/.netrc ]; then
-	echo "  File '${HOME}/.netrc' already exists. That's OK. We'll update it here if necessary."
+if [ -f ${PATH_FILE_NETRC} ]; then
+	echo "  File '${PATH_FILE_NETRC}' already exists. That's OK. We'll update it here if necessary."
 else
-	echo "  No .netrc file was found in your home directore (${HOME}/.netrc). That's OK."
-	echo "  It will be created and filled with login information for"
+	echo "  File '${PATH_FILE_NETRC}' (.netrc file)"
+	echo "  does not exist. That's OK. It will be created and filled with login information for"
 	echo "  'https://scihub.copernicus.eu/dhus' and 'http://code-de.org' in the following steps."
 fi
 
 for MACHINE in "scihub.copernicus.eu" "sso.eoc.dlr.de"; do
-	if ( grep -q "machine ${MACHINE}" ${HOME}/.netrc ); then
+	if [ -f ${PATH_FILE_NETRC} ] && ( grep -q "machine ${MACHINE}" ${PATH_FILE_NETRC} ); then
 		echo
 		echo "  There already exists an entry for the machine '${MACHINE}'."
-		usrnm=$(grep -2 "machine ${MACHINE}" ${HOME}/.netrc | grep login | sed 's/^.*login //')
+		usrnm=$(grep -2 "machine ${MACHINE}" ${PATH_FILE_NETRC} | grep login | sed 's/^.*login //')
+		echo
 		echo "> Are those user account credentials (username '$usrnm') valid at the moment?"
-		read -p "  (if you are not sure, better examine the ${HOME}/.netrc file) (Y/N) [N]: " creditials_valid
+		read -p "  (if you are not sure, better examine the ${PATH_FILE_NETRC} file) (Y/N) [N]: " creditials_valid
 		if [[ $creditials_valid == [yY] || $creditials_valid == [yY][eE][sS] ]]; then
 			echo "  Excellent!"
 		else
 			echo "  Alright. Let's update your credentials now."
+			echo
 			read -p "> Please enter your USER NAME for ${MACHINE}: " USRNAME_TMP
 			printf "> Please enter your USER PASSWORD for ${MACHINE}: "
 			read -s PWD_TMP
@@ -71,16 +76,17 @@ for MACHINE in "scihub.copernicus.eu" "sso.eoc.dlr.de"; do
 				echo "  Abbording now."
 				exit
 			fi
-			perl -i.original -0400 -pe "s/machine ${MACHINE}(.*?)\n(.*?)login(.*?)\n(.*?)password(.*?)\n/machine ${MACHINE}\n    login ${USRNAME_TMP}\n    password ${PWD_TMP}\n/igs" ${HOME}/.netrc
-			echo "  Successfully updated user accout credentials for machine '${MACHINE}' in '${HOME}/.netrc'."
+			perl -i.original -0400 -pe "s/machine ${MACHINE}(.*?)\n(.*?)login(.*?)\n(.*?)password(.*?)\n/machine ${MACHINE}\n    login ${USRNAME_TMP}\n    password ${PWD_TMP}\n/igs" ${PATH_FILE_NETRC}
+			echo "  Successfully updated user accout credentials for machine '${MACHINE}' in '${PATH_FILE_NETRC}'."
 			unset PWD_TMP
 			unset PWD_TMP_validate
 		fi
 	else
 		echo
 		echo "  No user account credentials for machine ${MACHINE}' found "
-		echo "  in file '${HOME}/.netrc'."
+		echo "  in file '${PATH_FILE_NETRC}'."
 		echo "  Let's enter those credentials now."
+		echo
 		read -p "> Please enter your USER NAME for ${MACHINE}: " USRNAME_TMP
 		printf "> Please enter your USER PASSWORD for ${MACHINE}: "
 		read -s PWD_TMP
@@ -95,13 +101,16 @@ for MACHINE in "scihub.copernicus.eu" "sso.eoc.dlr.de"; do
 			echo "  Abbording now."
 			exit
 		fi
-		echo >> ${HOME}/.netrc
-		echo "machine ${MACHINE}" >> ${HOME}/.netrc
-		echo "    login ${USRNAME_TMP}" >> ${HOME}/.netrc
-		echo "    password ${PWD_TMP}" >> ${HOME}/.netrc
+		echo >> ${PATH_FILE_NETRC}
+		echo "machine ${MACHINE}" >> ${PATH_FILE_NETRC}
+		echo "    login ${USRNAME_TMP}" >> ${PATH_FILE_NETRC}
+		echo "    password ${PWD_TMP}" >> ${PATH_FILE_NETRC}
 	fi
 done
-chmod 400 ${HOME}/.netrc
+chmod 400 ${PATH_FILE_NETRC}
+
+echo
+echo "Great. netrc setup completed."
 
 echo
 echo "  +-------------------------------------"
@@ -265,31 +274,46 @@ echo
 echo "  Great. Code-DE-Tools is good to go."
 
 echo
-# echo "> +-------------------------------------"
-# echo "  | Setting up a conda environment and"
-# echo "  | installing required python packages"
-# echo "  | in that environment."
-# echo "  +-------------------------------------"
-# # Create an anaconda environment for Python 3.6
-# # named "sen2_batch_processor" without asking for 
-# # confirmation. Package version takes precedence 
-# # over channel prior. Lastly, update dependencies.
-# conda create -n sen2_batch_processor -y python=3.6 \
-#              --no-channel-priority --update-deps
-# 
-# # Add conda channel conda-forge, which - at the time of
-# # development - was ahead of the default channels by
-# # means of gdal version 2.3.1 (which is required by
-# # the Sentinel-2 processing tools)
-# conda config --add channels conda-forge
-# conda install --name sen2_batch_processor -y --file requirements.txt
-# 
-# 
+echo "  +-------------------------------------"
+echo "  | Setting up SuperRes"
+echo "  +-------------------------------------"
 # # download superres code
 # # TODO
-# 
-# 
-# rm -r $PATH_DIR_TMP
-# 
-# # activate conda environment
-# source activate sen2_batch_processor
+
+
+
+echo
+echo "> +-------------------------------------"
+echo "  | Setting up a conda environment and"
+echo "  | installing required python packages"
+echo "  | in that environment."
+echo "  +-------------------------------------"
+# Create an anaconda environment for Python 3.6
+# named "sen2_batch_processor" without asking for 
+# confirmation. Package version takes precedence 
+# over channel prior. Lastly, update dependencies.
+conda create -n sen2_batch_processor -y python=3.6 \
+             --no-channel-priority --update-deps
+
+# Add conda channel conda-forge, which - at the time of
+# development - was ahead of the default channels by
+# means of gdal version 2.3.1 (which is required by
+# the Sentinel-2 processing tools)
+conda config --add channels conda-forge
+conda install --name sen2_batch_processor -y --file requirements.txt
+
+
+rm -r $PATH_DIR_TMP
+
+# activate conda environment
+#source activate sen2_batch_processor
+source activate $NAME_CONDA_ENVIRONMENT
+
+
+echo
+echo "  Installation completed successfully."
+echo 
+echo "  Congratilations! The hard part is over! "
+
+echo "  Enjoy using the Sentinel-2 batch download/processing toolbox."
+echo
