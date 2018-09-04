@@ -2,7 +2,8 @@
 
 path_to_sen2cor="/home/ga39yoz/data/s2SR/LCZ42/src/sen2cor/Sen2Cor-02.05.05-Linux64/bin/L2A_Process"
 
-path_to_target_dir_base="/home/ga39yoz/data/s2SR/LCZ42/data/sen2_kop"
+path_to_target_dir_base="${PATH_DIR_MAIN}/data/sen2"
+
 season="summer"
 
 for path_scene in $path_to_target_dir_base/*; do
