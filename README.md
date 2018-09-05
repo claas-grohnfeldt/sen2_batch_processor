@@ -112,7 +112,7 @@ This is realized by running a dryrun query without contraints on the cloud cover
 Simple scan of all (.SAFE) file names returned from the query (see previous step) with subsequent identification of the set of *unique* tile IDs intersecting with the ROI. A tile ID is a string following the naming convention "Txxxxx" like, e.g., "T23KKQ".
 3. **Find least cloudy product(s) for each previously identified tile ID** \
 For each unique tile ID, starting from ```cloudCover=[cloudCoverMin,cloudCoverMax]=[0,0]``` (ideal case), find the lowest parameter value for ```cloudCoverMax```, for which the query finds a non-empty set of products. In this simple implementation, ```cloudCoverMax``` is gradually incremeted one percentage at a time. Note that binary search would be asymptotically more efficient but an over-kill here since, in the vast majority of cases, minimum values for ```cloudCoverMax``` are expected to be found near 0.
-4. **Find best set of unique tiles** \
+4. **Find best set of unique tiles (optionally: constrain to daylight observation)** \
 If the query finds multiple tiles corresponding to the same tile ID, find the set of tiles (each of which corresponding to a different tile ID) whose elements were acquired at dates/times as similar to each other as possible. This is realized by formulating and solving a shortest path problem using an undirected graph with adjecency lists, where verteces corresond to acquisition dates/times and edges correspond to absolute time differences.
 5. **Download tiles**\
 Self-explaining.
