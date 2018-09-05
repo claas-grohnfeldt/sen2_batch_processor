@@ -179,8 +179,11 @@ if $INSTALL_SEN2COR; then
 	echo "  Downloading and installing sen2cor now."
 	echo
 	echo "===>"
-	wget 'http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run' -P $PATH_DIR_TMP
-	bash "${PATH_DIR_TMP}/Sen2Cor-02.05.05-Linux64.run" --target "${PATH_TARGET_DIR_SEN2COR}"
+	#SOURCE_SEN2COR="http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run"
+	#wget 'http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run' -P $PATH_DIR_TMP
+	wget "$SOURCE_SEN2COR" -P $PATH_DIR_TMP
+	#bash "${PATH_DIR_TMP}/Sen2Cor-02.05.05-Linux64.run" --target "${PATH_TARGET_DIR_SEN2COR}"
+	bash "${PATH_DIR_TMP}/$(basename $SOURCE_SEN2COR)" --target "${PATH_TARGET_DIR_SEN2COR}"
 	PATH_TARGET_FILE_L2A_Process="${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process"
 	echo "<=== DONE"
 	echo
@@ -282,11 +285,14 @@ echo "  +-------------------------------------"
 
 echo
 echo "  +-------------------------------------"
-echo "  | "
+echo "  | Download the Sentinel-2 tiling grid"
 echo "  +-------------------------------------"
 # # download superres code
 # # TODO
-
+PATH_DIR_S2_TILING_GRID=${PATH_FILE_S2_TILING_GRID%*$(basename $PATH_FILE_S2_TILING_GRID)}
+mkdir -p $PATH_DIR_S2_TILING_GRID
+wget "$SOURCE_S2_TILING_GRID" -P $PATH_DIR_S2_TILING_GRID
+mv "$PATH_DIR_S2_TILING_GRID/$(basename $SOURCE_S2_TILING_GRID)" "$PATH_FILE_S2_TILING_GRID"
 
 echo
 echo "> +-------------------------------------"
@@ -309,11 +315,11 @@ conda config --add channels conda-forge
 conda install --name sen2_batch_processor -y --file requirements.txt
 
 
+
 rm -r $PATH_DIR_TMP
 
 # activate conda environment
-#source activate sen2_batch_processor
-source activate $NAME_CONDA_ENVIRONMENT
+#source activate $NAME_CONDA_ENVIRONMENT
 
 
 echo
