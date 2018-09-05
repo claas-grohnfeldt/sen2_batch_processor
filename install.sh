@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-#. settings.cfg
+# load paths and preferences
 . configure.sh
 
-# PATH_TARGET_DIR_MAIN=$(pwd)
-# PATH_DIR_TMP="${PATH_TARGET_DIR_MAIN}/tmp"
-# PATH_TARGET_DIR_SEN2COR="${PATH_TARGET_DIR_MAIN}/src/thirdparties/sen2cor"
-# PATH_TARGET_DIR_CODE_DE_TOOLS="${PATH_TARGET_DIR_MAIN}/src/thirdparties/code-de-tools"
+# PATH_DIR_MAIN=$(pwd)
+# PATH_DIR_TMP="${PATH_DIR_MAIN}/tmp"
+# PATH_DIR_SEN2COR="${PATH_DIR_MAIN}/src/thirdparties/sen2cor"
+# PATH_DIR_CODE_DE_TOOLS="${PATH_DIR_MAIN}/src/thirdparties/code-de-tools"
 # PATH_FILE_NETRC=${HOME}/.netrc
 
 mkdir -p $PATH_DIR_TMP
-mkdir -p $PATH_TARGET_DIR_SEN2COR
+mkdir -p $PATH_DIR_SEN2COR
 
 echo
 echo "#####################################################################################"
@@ -118,15 +118,15 @@ echo "  | Setting up sen2cor"
 echo "  +-------------------------------------"
 INSTALL_SEN2COR=true
 # Check if there exists a local installation of sen2cor in this project directory. 
-if [ -f "${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process" ]; then
-	echo "  File '${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process' already exists.";
-	if [ "$(bash ${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process -h | grep 'Sentinel-2 Level 2A Processor')" ] ; then 
+if [ -f "${PATH_DIR_SEN2COR}/bin/L2A_Process" ]; then
+	echo "  File '${PATH_DIR_SEN2COR}/bin/L2A_Process' already exists.";
+	if [ "$(bash ${PATH_DIR_SEN2COR}/bin/L2A_Process -h | grep 'Sentinel-2 Level 2A Processor')" ] ; then 
 		echo "  Program seems to be OK.";
 		echo
 		read -p "> Would you like to use this existing installation? (Y/N) [Y]: " USE_EXISTING_SEN2COR
 		if ! [[ $USE_EXISTING_SEN2COR == [nN] || $USE_EXISTING_SEN2COR == [nN][oO] ]]; then
 			INSTALL_SEN2COR=false
-			PATH_TARGET_FILE_L2A_Process=${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process
+			PATH_FILE_L2A_Process=${PATH_DIR_SEN2COR}/bin/L2A_Process
 		fi
 	else
 		echo "  Warning: Something is wrong with that existing program (L2A_Process)."
@@ -141,13 +141,13 @@ if $INSTALL_SEN2COR; then
 	
 	if [[ $sen2cor_installed == [yY] || $sen2cor_installed == [yY][eE][sS] ]]; then
 		echo "> Please enter the full path of the file 'L2A_Process' (by default to be found"
-		read -p "  <path_to_sen2cor_dir>/bin/L2A_Process): " PATH_TARGET_FILE_L2A_Process
-		if [ -f $PATH_TARGET_FILE_L2A_Process ] && [ "$(bash $PATH_TARGET_FILE_L2A_Process -h | grep 'Sentinel-2 Level 2A Processor')" ]; then
+		read -p "  <path_to_sen2cor_dir>/bin/L2A_Process): " PATH_FILE_L2A_Process
+		if [ -f $PATH_FILE_L2A_Process ] && [ "$(bash $PATH_FILE_L2A_Process -h | grep 'Sentinel-2 Level 2A Processor')" ]; then
 			echo "  Path and program (L2A_Process) seem to be OK."
 			echo "  Creating symbolic link to the following local project directory:"
-			echo "  ${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process"
-			mkdir -p ${PATH_TARGET_DIR_SEN2COR}/bin
-			ln -s $PATH_TARGET_FILE_L2A_Process ${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process
+			echo "  ${PATH_DIR_SEN2COR}/bin/L2A_Process"
+			mkdir -p ${PATH_DIR_SEN2COR}/bin
+			ln -s $PATH_FILE_L2A_Process ${PATH_DIR_SEN2COR}/bin/L2A_Process
 			echo "  Succeeded."
 			INSTALL_SEN2COR=false
 		else
@@ -160,9 +160,9 @@ if $INSTALL_SEN2COR; then
 	fi
 fi
 if $INSTALL_SEN2COR; then
-	if [ -d ${PATH_TARGET_DIR_SEN2COR} ] && ! [ -z "$(ls -A ${PATH_TARGET_DIR_SEN2COR})" ]; then
+	if [ -d ${PATH_DIR_SEN2COR} ] && ! [ -z "$(ls -A ${PATH_DIR_SEN2COR})" ]; then
 		echo "  ! Warning: The default installation directory "
-		echo "  ! ${PATH_TARGET_DIR_SEN2COR}/"
+		echo "  ! ${PATH_DIR_SEN2COR}/"
 		echo "  ! is not empty. The content of that directory is about to be OVERWRITTEN! "
 		echo
 		read -p "> Would you like to proceed with this? (Y/N) [N]: " PROCEED
@@ -182,9 +182,9 @@ if $INSTALL_SEN2COR; then
 	#SOURCE_SEN2COR="http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run"
 	#wget 'http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run' -P $PATH_DIR_TMP
 	wget "$SOURCE_SEN2COR" -P $PATH_DIR_TMP
-	#bash "${PATH_DIR_TMP}/Sen2Cor-02.05.05-Linux64.run" --target "${PATH_TARGET_DIR_SEN2COR}"
-	bash "${PATH_DIR_TMP}/$(basename $SOURCE_SEN2COR)" --target "${PATH_TARGET_DIR_SEN2COR}"
-	PATH_TARGET_FILE_L2A_Process="${PATH_TARGET_DIR_SEN2COR}/bin/L2A_Process"
+	#bash "${PATH_DIR_TMP}/Sen2Cor-02.05.05-Linux64.run" --target "${PATH_DIR_SEN2COR}"
+	bash "${PATH_DIR_TMP}/$(basename $SOURCE_SEN2COR)" --target "${PATH_DIR_SEN2COR}"
+	PATH_FILE_L2A_Process="${PATH_DIR_SEN2COR}/bin/L2A_Process"
 	echo "<=== DONE"
 	echo
 	echo '  Note:'
@@ -193,7 +193,7 @@ if $INSTALL_SEN2COR; then
 fi
 echo
 echo "  Great. Sen2Cor is good to go."
-# TODO: PATH_TARGET_FILE_L2A_Process Needed? If so, make variable available for later use (export?)
+# TODO: PATH_FILE_L2A_Process Needed? If so, make variable available for later use (export?)
 
 echo
 echo "  +-------------------------------------"
@@ -201,15 +201,15 @@ echo "  | Setting up code-de-tools"
 echo "  +-------------------------------------"
 INSTALL_CODE_DE_TOOLS=true
 # Check if code-de-tools already exist in project directory
-if [ -f "${PATH_TARGET_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh" ]; then
-	echo "  File '${PATH_TARGET_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh' already exists.";
-	if [ "$(bash ${PATH_TARGET_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh | grep 'USAGE:')" ] ; then 
+if [ -f "${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh" ]; then
+	echo "  File '${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh' already exists.";
+	if [ "$(bash ${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh | grep 'USAGE:')" ] ; then 
 		echo "  Program seems to be OK.";
 		echo
 		read -p "> Would you like to use this existing installation? (Y/N) [Y]: " USE_EXISTING_CODE_DE_TOOLS
 		if ! [[ $USE_EXISTING_CODE_DE_TOOLS == [nN] || $USE_EXISTING_CODE_DE_TOOLS == [nN][oO] ]]; then
 			INSTALL_CODE_DE_TOOLS=false
-			PATH_TARGET_FILE_CODE_DE_TOOLS_DOWNLOAD=${PATH_TARGET_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh
+			PATH_FILE_CODE_DE_TOOLS_DOWNLOAD=${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh
 		fi
 	else
 		echo "  Warning: Something is wrong with that existing program (code-de-query-download.sh)."
@@ -227,14 +227,14 @@ if $INSTALL_CODE_DE_TOOLS; then
 		echo "> Please enter the full path of the file 'code-de-query-download.sh' (by"
 		echo "  default to be found <path_to_code_de_tools_dir>/bin/code-de-query-download.sh):"
 		printf "  "
-		read  PATH_TARGET_FILE_CODE_DE_TOOLS_DOWNLOAD
+		read  PATH_FILE_CODE_DE_TOOLS_DOWNLOAD
 		echo
-		if [ -f $PATH_TARGET_FILE_CODE_DE_TOOLS_DOWNLOAD ] && [ "$(bash $PATH_TARGET_FILE_CODE_DE_TOOLS_DOWNLOAD -h | grep 'USAGE:')" ]; then
+		if [ -f $PATH_FILE_CODE_DE_TOOLS_DOWNLOAD ] && [ "$(bash $PATH_FILE_CODE_DE_TOOLS_DOWNLOAD -h | grep 'USAGE:')" ]; then
 			echo "  Path and program (code-de-query-download.sh) seem to be OK."
 			echo "  Creating symbolic link to the following local project directory:"
-			echo "  ${PATH_TARGET_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh"
-			mkdir -p "${PATH_TARGET_DIR_CODE_DE_TOOLS}/bin"
-			ln -s $PATH_TARGET_FILE_CODE_DE_TOOLS_DOWNLOAD "${PATH_TARGET_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh"
+			echo "  ${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh"
+			mkdir -p "${PATH_DIR_CODE_DE_TOOLS}/bin"
+			ln -s $PATH_FILE_CODE_DE_TOOLS_DOWNLOAD "${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh"
 			echo "  Succeeded."
 			INSTALL_CODE_DE_TOOLS=false
 		else
@@ -247,9 +247,9 @@ if $INSTALL_CODE_DE_TOOLS; then
 	fi
 fi
 if $INSTALL_CODE_DE_TOOLS; then
-	if [ -d ${PATH_TARGET_DIR_CODE_DE_TOOLS} ] && ! [ -z "$(ls -A ${PATH_TARGET_DIR_CODE_DE_TOOLS})" ]; then
+	if [ -d ${PATH_DIR_CODE_DE_TOOLS} ] && ! [ -z "$(ls -A ${PATH_DIR_CODE_DE_TOOLS})" ]; then
 		echo "  ! Warning: The default installation directory "
-		echo "  ! ${PATH_TARGET_DIR_CODE_DE_TOOLS}/"
+		echo "  ! ${PATH_DIR_CODE_DE_TOOLS}/"
 		echo "  ! is not empty. The content of that directory is about to be DELETED for a clean installation. "
 		echo
 		read -p "> Would you like to proceed with this? (Y/N) [N]: " PROCEED
@@ -260,8 +260,8 @@ if $INSTALL_CODE_DE_TOOLS; then
 			exit
 		else
 			echo "  Alright then. Let's do this."
-			echo "  Removing the directory '${PATH_TARGET_DIR_CODE_DE_TOOLS}/' .."
-			rm -rf "${PATH_TARGET_DIR_CODE_DE_TOOLS}"
+			echo "  Removing the directory '${PATH_DIR_CODE_DE_TOOLS}/' .."
+			rm -rf "${PATH_DIR_CODE_DE_TOOLS}"
 			echo "  done."
 		fi
 	fi
@@ -269,7 +269,7 @@ if $INSTALL_CODE_DE_TOOLS; then
 	echo "  Downloading and installing 'code_de_tools' now."
 	echo
 	echo "===>"
-	git clone https://github.com/dlr-eoc/code-de-tools.git $PATH_TARGET_DIR_CODE_DE_TOOLS
+	git clone https://github.com/dlr-eoc/code-de-tools.git $PATH_DIR_CODE_DE_TOOLS
 	echo "<=== DONE"
 	
 fi
