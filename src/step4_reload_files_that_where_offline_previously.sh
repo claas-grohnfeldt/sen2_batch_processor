@@ -7,7 +7,10 @@ printf "# 2) downloading missing data\n"
 printf "#\n"
 printf "###############################################\n"
 
-path_to_target_dir_base="/home/ga39yoz/data/s2SR/LCZ42/data/sen2_kop"
+# load paths
+. configure.sh
+
+#path_to_target_dir_base="/home/ga39yoz/data/s2SR/LCZ42/data/sen2_kop"
 curlOpts="--netrc -Lk --cookie-jar /tmp/t"
 baseURLSciHub="https://scihub.copernicus.eu/dhus/odata/v1/Products"
 # require:
