@@ -2,13 +2,16 @@
 # Make sure that commands which fail will cause the shell script to exit immediately
 set -e 
 
-path_to_base_dir="/home/ga39yoz/data/s2SR/LCZ42"
-path_to_src="${path_to_base_dir}/src"
-path_to_CodeDE_query_download_script="${path_to_base_dir}/src/code-de-tools/bin/code-de-query-download.sh"
-path_to_csv_file_ROIs="${path_to_base_dir}/ROIs/ROIs.csv"
-path_to_Sentinel2_tiling_grid_kml_file="${path_to_base_dir}/aux/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml"
-path_to_python_script_to_find_best_set_of_tiles="${path_to_base_dir}/src/find_best_set_of_unique_tiles.py"
-path_to_target_dir_base="${path_to_base_dir}/data/sen2_kop"
+# load paths
+. configure.sh
+
+# path_to_base_dir="/home/ga39yoz/data/s2SR/LCZ42"
+# path_to_src="${path_to_base_dir}/src"
+# path_to_CodeDE_query_download_script="${path_to_base_dir}/src/code-de-tools/bin/code-de-query-download.sh"
+# path_to_csv_file_ROIs="${path_to_base_dir}/ROIs/ROIs.csv"
+# path_to_Sentinel2_tiling_grid_kml_file="${path_to_base_dir}/aux/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml"
+# path_to_python_script_to_find_best_set_of_tiles="${path_to_base_dir}/src/find_best_set_of_unique_tiles.py"
+# path_to_target_dir_base="${path_to_base_dir}/data/sen2_kop"
 
 #parentIdentifier=EOP:CODE-DE:S1_SAR_L1_GRD
 parentIdentifier="EOP:CODE-DE:S2_MSI_L1C"
@@ -57,12 +60,21 @@ while read -r fullline || [[ -n "$fullline" ]]; do
 	#    UL= "upper left corner"
 	#    LR= "lower right corner"
 	lon_UL=${line_latlon%%,*}
-	line=${line#*,}
+	echo "line_latlon = $line_latlon"
+	echo "lon_UL = $lon_UL"
+	echo "line = $line"
+	line=${line_latlon#*,}
+	echo "line = $line"
 	lat_UL=${line%%,*}
+	echo "lat_UL = $lat_UL"
 	line=${line#*,}
+	echo "line = $line"
 	lon_LR=${line%%,*}
+	echo "lon_LR = $lon_LR"
 	line=${line#*,}
+	echo "line = $line"
 	lat_LR=${line%%,*}
+	echo "lat_LR = $lat_LR"
 
     # The center coordinates will be used later to query information about 
     # sunset and sunrise times.
