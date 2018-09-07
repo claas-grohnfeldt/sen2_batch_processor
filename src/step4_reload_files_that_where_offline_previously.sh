@@ -10,6 +10,7 @@ printf "###############################################\n"
 # load paths
 . configure.sh
 
+parallel=1
 #path_to_target_dir_base="/home/ga39yoz/data/s2SR/LCZ42/data/sen2_kop"
 curlOpts="--netrc -Lk --cookie-jar /tmp/t"
 baseURLSciHub="https://scihub.copernicus.eu/dhus/odata/v1/Products"
