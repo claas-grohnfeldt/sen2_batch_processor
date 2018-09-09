@@ -19,7 +19,7 @@ parentIdentifier="EOP:CODE-DE:S2_MSI_L1C"
 cloudCoverMinPerc=0
 cloudCoverMaxPerc=100
 
-daylight_acquisitions_only=true
+# daylight_acquisitions_only=true
 
 batchSize=999
 downloadParallel=2

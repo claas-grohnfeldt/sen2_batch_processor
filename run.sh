@@ -56,19 +56,22 @@ echo "<------------"
 echo "-----------------------------"
 echo " downloading"
 echo "-----------------------------"
+daylight_acquisitions_only=false
+bash $PATH_DIR_SRC/step3_download_via_codede.sh
 
 echo "-----------------------------"
 echo " re-downloading"
 echo "-----------------------------"
+bash $PATH_DIR_SRC/step4_reload_files_that_where_offline_previously.sh
 
-# ------------------------------------------
-# sen2cor L1C -> L2A
-# ------------------------------------------
-# # preparation
-# bash $PATH_DIR_MAIN/src/step5_L1C_to_L2A_via_sen2cor.sh
-# 
-# # parllel processing
-# python3 $PATH_DIR_MAIN/src/step5_L1C_to_L2A_via_sen2cor_parallel_wrapper.py
+echo "------------------------------------------"
+echo " sen2cor L1C -> L2A"
+echo "------------------------------------------"
+# preparation
+bash $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor.sh
+
+# parllel processing
+python3 $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor_parallel_wrapper.py
 
 
 
