@@ -19,7 +19,7 @@ parentIdentifier="EOP:CODE-DE:S2_MSI_L1C"
 cloudCoverMinPerc=0
 cloudCoverMaxPerc=100
 
-# daylight_acquisitions_only=true
+daylight_acquisitions_only=false
 
 batchSize=999
 downloadParallel=2
@@ -185,7 +185,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
     echo "      for each tile ID. "
     echo "----------------------------------------------------------------------------"
 
-    if [ daylight_acquisitions_only ]; then
+    if [ "$daylight_acquisitions_only" = true ]; then
         for tileID in "${uniqueTileIDs[@]}"; do
             only_nighttime_acquisitions=true
             while IFS=', ' read -r missionIDTMP productLevelTMP sensingDateTMP sensingTimeTMP processingBaselineNumberTMP relativeOrbitNumberTMP tileIDTMP; do
@@ -295,7 +295,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
 			            # If local time was, on that day, NOT during daylight 
                         # (i.e. before sunrise+1h or after sunset-1h), then set 
                         # queryOutTMP="No products found" (ignore this product (date))
-                        if [ daylight_acquisitions_only ]; then
+                        if [ "$daylight_acquisitions_only" = true ]; then
                             #re-format from YYYYMMDD to YYYY-MM-DD
         			        date_str="${sensingDate:0:4}-${sensingDate:4:2}-${sensingDate:6:2}"
                             sunrise_sunset_time=$(bash $path_to_src/get_sunrise_sunset.sh $ROI_center_lon $ROI_center_lat $date_str)
