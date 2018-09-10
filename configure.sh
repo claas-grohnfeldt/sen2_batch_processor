@@ -6,13 +6,16 @@ PATH_DIR_SRC="$PATH_DIR_MAIN/src"
 
 PATH_DIR_CODE_DE_TOOLS="$PATH_DIR_SRC/thirdparties/code-de-tools"
 
-#PATH_DIR_DATA="$PATH_DIR_MAIN/data"
-PATH_DIR_DATA="/datastore/exchange/grohnfeldt/sen2_batch_processor_data"
+#PATH_DIR_DATA="/datastore/exchange/grohnfeldt/sen2_batch_processor_data"
+PATH_DIR_DATA="$PATH_DIR_MAIN/data"
+PATH_DIR_DATA_SEN2="${PATH_DIR_DATA}/sen2"
+
 path_to_csv_file_ROIs="$PATH_DIR_MAIN/input/ROIs.csv"
 
 SOURCE_S2_TILING_GRID="https://sentinel.esa.int/documents/247904/1955685/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml"
 PATH_FILE_S2_TILING_GRID="$PATH_DIR_DATA/Sentinel2_global_tiling_grid.kml"
 path_to_Sentinel2_tiling_grid_kml_file=$PATH_FILE_S2_TILING_GRID # "${path_to_base_dir}/aux/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml"
+PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST="$PATH_DIR_TMP/sen2core_to_be_processed.txt"
 
 PATH_FILE_NETRC="$PATH_DIR_MAIN/.netrc"
 
