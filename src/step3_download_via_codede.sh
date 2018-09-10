@@ -42,6 +42,15 @@ elif [ "$season" = "summer" ]; then
 	endDate="2018-08-31T23:59:59.999"
 fi
 
+# make sure that code-de download script is available at location specified in 'configure.sh'
+if ! [ -f $path_to_CodeDE_query_download_script ]; then
+   echo "code-de download script does not exist at location specified in 'configure.sh':"
+   echo "$path_to_CodeDE_query_download_script ('no such file exists in file system')"
+   echo "Forgot to run 'bash install.sh'? Or changed folder structure since running 'bash install.sh'?"
+   echo "Abording now."
+   exit 1
+fi
+
 printf "###############################################\n"
 printf "#\n"
 printf "# 1) Identifying and downloading data\n"
@@ -60,21 +69,21 @@ while read -r fullline || [[ -n "$fullline" ]]; do
 	#    UL= "upper left corner"
 	#    LR= "lower right corner"
 	lon_UL=${line_latlon%%,*}
-	echo "line_latlon = $line_latlon"
-	echo "lon_UL = $lon_UL"
-	echo "line = $line"
+	# echo "line_latlon = $line_latlon"
+	# echo "lon_UL = $lon_UL"
+	# echo "line = $line"
 	line=${line_latlon#*,}
-	echo "line = $line"
+	# echo "line = $line"
 	lat_UL=${line%%,*}
-	echo "lat_UL = $lat_UL"
+	# echo "lat_UL = $lat_UL"
 	line=${line#*,}
-	echo "line = $line"
+	# echo "line = $line"
 	lon_LR=${line%%,*}
-	echo "lon_LR = $lon_LR"
+	# echo "lon_LR = $lon_LR"
 	line=${line#*,}
-	echo "line = $line"
+	# echo "line = $line"
 	lat_LR=${line%%,*}
-	echo "lat_LR = $lat_LR"
+	# echo "lat_LR = $lat_LR"
 
     # The center coordinates will be used later to query information about 
     # sunset and sunrise times.
