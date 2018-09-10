@@ -3,10 +3,6 @@
 # load paths
 . configure.sh
 
-PATH_FILE_L2A_Process="${PATH_DIR_SEN2COR}/bin/L2A_Process"
-#PATH_DIR_DATA_SEN2="${PATH_DIR_MAIN}/data/sen2"
-
-PATH_DIR_DATA_SEN2=$path_to_target_dir_base #"${PATH_DIR_DATA}/sen2"
 
 keep_L1C_zip_file=true
 keep_L1C_unzipped_SAFE_folder=false
@@ -14,8 +10,12 @@ keep_L1C_unzipped_SAFE_folder=false
 season="summer"
 
 #path_to_sen2cor="/home/ga39yoz/data/s2SR/LCZ42/src/sen2cor/Sen2Cor-02.05.05-Linux64/bin/L2A_Process"
-PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST="$PATH_DIR_TMP/sen2core_to_be_processed_$(date +%y%m%d_%H%M%S).txt"
+PATH_FILE_L2A_Process="${PATH_DIR_SEN2COR}/bin/L2A_Process"
+#PATH_DIR_DATA_SEN2="${PATH_DIR_DATA}/sen2"
+#PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST="$PATH_DIR_TMP/sen2core_to_be_processed.txt"
+PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST="${PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST%.txt}_$(date +%y%m%d_%H%M%S).txt"
 
+#path_to_target_dir_base="${PATH_DIR_MAIN}/data/sen2"
 
 mode="interactive"
 #   =interactive
@@ -284,6 +284,9 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 				echo "    '$PWD/$PATH_DIR_TILE_L1C'"
 				printf "    to the list of L1C products to be processed via sen2cor ... "
 				echo "$PWD/$PATH_DIR_TILE_L1C" >> $PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST
+				echo "done."
+				echo "    Create symbolic link '$PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST' to file '$PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST' ... "
+				ln -sf $PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST $PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST
 				echo "done."
 			else 
 				echo "    Warning: '$PATH_DIR_TILE_L1C' seems not to be complete .SAFE folder / Sentinel-2 product!"
