@@ -3,6 +3,10 @@
 # load paths
 . configure.sh
 
+PATH_FILE_L2A_Process="${PATH_DIR_SEN2COR}/bin/L2A_Process"
+#PATH_DIR_DATA_SEN2="${PATH_DIR_MAIN}/data/sen2"
+
+PATH_DIR_DATA_SEN2=$path_to_target_dir_base #"${PATH_DIR_DATA}/sen2"
 
 keep_L1C_zip_file=true
 keep_L1C_unzipped_SAFE_folder=false
@@ -10,11 +14,8 @@ keep_L1C_unzipped_SAFE_folder=false
 season="summer"
 
 #path_to_sen2cor="/home/ga39yoz/data/s2SR/LCZ42/src/sen2cor/Sen2Cor-02.05.05-Linux64/bin/L2A_Process"
-PATH_FILE_L2A_Process="${PATH_DIR_SEN2COR}/bin/L2A_Process"
-PATH_DIR_DATA_SEN2="${PATH_DIR_DATA}/sen2"
 PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST="$PATH_DIR_TMP/sen2core_to_be_processed_$(date +%y%m%d_%H%M%S).txt"
 
-#path_to_target_dir_base="${PATH_DIR_MAIN}/data/sen2"
 
 mode="interactive"
 #   =interactive
