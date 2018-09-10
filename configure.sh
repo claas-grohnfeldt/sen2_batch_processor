@@ -8,7 +8,7 @@ PATH_DIR_CODE_DE_TOOLS="$PATH_DIR_SRC/thirdparties/code-de-tools"
 
 #PATH_DIR_DATA="$PATH_DIR_MAIN/data"
 PATH_DIR_DATA="/datastore/exchange/grohnfeldt/sen2_batch_processor_data"
-path_to_csv_file_ROIs="$PATH_DIR_MAIN/ROIs.csv"
+path_to_csv_file_ROIs="$PATH_DIR_MAIN/input/ROIs.csv"
 
 SOURCE_S2_TILING_GRID="https://sentinel.esa.int/documents/247904/1955685/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml"
 PATH_FILE_S2_TILING_GRID="$PATH_DIR_DATA/Sentinel2_global_tiling_grid.kml"
