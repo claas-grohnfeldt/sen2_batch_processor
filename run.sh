@@ -6,6 +6,8 @@
 # Description: 
 #   high-level interface to call various subroutines implemented in this toolbox
 #
+python3 testest.py
+
 script_name=$(basename -- "$0")
 echo "-----------------------------------"
 echo "executing '$script_name $@'"

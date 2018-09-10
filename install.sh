@@ -32,7 +32,6 @@ else
 	echo
 	echo "  Please sign up on the respective website(s) and run this installer"
 	echo "  again once you possess valid credentials."
-	echo
 	echo "  Abbording now."
 	exit
 fi
@@ -42,7 +41,9 @@ echo "  +-------------------------------------"
 echo "  | Setting up a netrc file for login"
 echo "  +-------------------------------------"
 if [ -f ${PATH_FILE_NETRC} ]; then
-	echo "  File '${PATH_FILE_NETRC}' already exists. That's OK. We'll update it here if necessary."
+	echo "  File '${PATH_FILE_NETRC}' "
+	echo "  already exists in the file system."
+        echo "  That's OK. We'll update it here if necessary."
 else
 	echo "  File '${PATH_FILE_NETRC}' (.netrc file)"
 	echo "  does not exist yet. That's OK. It will be created and filled with login information for"
@@ -60,9 +61,10 @@ for MACHINE in "scihub.copernicus.eu" "sso.eoc.dlr.de"; do
 		echo
 		echo "  There already exists an entry for the machine '${MACHINE}'."
 		usrnm=$(grep -2 "machine ${MACHINE}" ${PATH_FILE_NETRC} | grep login | sed 's/^.*login //')
-		echo
 		echo "> Are those user account credentials (username '$usrnm') valid at the moment?"
-		read -p "  (if you are not sure, better examine the ${PATH_FILE_NETRC} file) (Y/N) [N]: " creditials_valid
+		echo "  (if you are not sure, please examine the file"
+                printf "  ${PATH_FILE_NETRC}) (Y/N) [N]: " 
+                read creditials_valid
 		if [[ $creditials_valid == [yY] || $creditials_valid == [yY][eE][sS] ]]; then
 			echo "  Excellent!"
 		else
@@ -116,7 +118,7 @@ done
 chmod 400 ${PATH_FILE_NETRC}
 
 echo
-echo "Great. netrc setup completed."
+echo "  Great. netrc setup completed."
 
 echo
 echo "  +-------------------------------------"
@@ -125,10 +127,10 @@ echo "  +-------------------------------------"
 INSTALL_SEN2COR=true
 # Check if there exists a local installation of sen2cor in this project directory. 
 if [ -f "${PATH_DIR_SEN2COR}/bin/L2A_Process" ]; then
-	echo "  File '${PATH_DIR_SEN2COR}/bin/L2A_Process' already exists.";
+	echo "  File '${PATH_DIR_SEN2COR}/bin/L2A_Process'"
+        echo "  already exists in the file system."
 	if [ "$(bash ${PATH_DIR_SEN2COR}/bin/L2A_Process -h | grep 'Sentinel-2 Level 2A Processor')" ] ; then 
 		echo "  Program seems to be OK.";
-		echo
 		read -p "> Would you like to use this existing installation? (Y/N) [Y]: " USE_EXISTING_SEN2COR
 		if ! [[ $USE_EXISTING_SEN2COR == [nN] || $USE_EXISTING_SEN2COR == [nN][oO] ]]; then
 			INSTALL_SEN2COR=false
@@ -170,7 +172,6 @@ if $INSTALL_SEN2COR; then
 		echo "  ! Warning: The default installation directory "
 		echo "  ! ${PATH_DIR_SEN2COR}/"
 		echo "  ! is not empty. The content of that directory is about to be OVERWRITTEN! "
-		echo
 		read -p "> Would you like to proceed with this? (Y/N) [N]: " PROCEED
 		if ! [[ $PROCEED == [yY] || $PROCEED == [yY][eE][sS] ]]; then
 			echo
@@ -208,10 +209,10 @@ echo "  +-------------------------------------"
 INSTALL_CODE_DE_TOOLS=true
 # Check if code-de-tools already exist in project directory
 if [ -f "${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh" ]; then
-	echo "  File '${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh' already exists.";
+	echo "  File '${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh'"
+	echo "  already exists in the file system."
 	if [ "$(bash ${PATH_DIR_CODE_DE_TOOLS}/bin/code-de-query-download.sh | grep 'USAGE:')" ] ; then 
 		echo "  Program seems to be OK.";
-		echo
 		read -p "> Would you like to use this existing installation? (Y/N) [Y]: " USE_EXISTING_CODE_DE_TOOLS
 		if ! [[ $USE_EXISTING_CODE_DE_TOOLS == [nN] || $USE_EXISTING_CODE_DE_TOOLS == [nN][oO] ]]; then
 			INSTALL_CODE_DE_TOOLS=false
@@ -257,7 +258,6 @@ if $INSTALL_CODE_DE_TOOLS; then
 		echo "  ! Warning: The default installation directory "
 		echo "  ! ${PATH_DIR_CODE_DE_TOOLS}/"
 		echo "  ! is not empty. The content of that directory is about to be DELETED for a clean installation. "
-		echo
 		read -p "> Would you like to proceed with this? (Y/N) [N]: " PROCEED
 		if ! [[ $PROCEED == [yY] || $PROCEED == [yY][eE][sS] ]]; then
 			echo
@@ -287,6 +287,7 @@ echo "  +-------------------------------------"
 echo "  | Setting up SuperRes"
 echo "  +-------------------------------------"
 # # download superres code
+echo "... to be done ..."
 # # TODO
 
 echo
@@ -295,10 +296,24 @@ echo "  | Download the Sentinel-2 tiling grid"
 echo "  +-------------------------------------"
 # # download superres code
 # # TODO
-PATH_DIR_S2_TILING_GRID=${PATH_FILE_S2_TILING_GRID%*$(basename $PATH_FILE_S2_TILING_GRID)}
-mkdir -p $PATH_DIR_S2_TILING_GRID
-wget "$SOURCE_S2_TILING_GRID" -P $PATH_DIR_S2_TILING_GRID
-mv "$PATH_DIR_S2_TILING_GRID/$(basename $SOURCE_S2_TILING_GRID)" "$PATH_FILE_S2_TILING_GRID"
+download_Sentinel2_tile_grid=true
+if [ -f $PATH_FILE_S2_TILING_GRID ]; then
+  echo "  File $PATH_FILE_S2_TILING_GRID"
+  echo "  already exists in the file system."
+  read -p "> Do you wish to re-download and overwrite it? [y]es [n]o (default: [n]): " overwrite_kml
+  if ( [ "$overwrite_kml" = y ] || [ "$overwrite_kml" = yes ] ); then
+    echo "  Yes? OK, existing file will be overwritten."
+  else
+    echo "  No? OK, existing file will be used."
+    download_Sentinel2_tile_grid=false
+  fi
+fi
+if [ "$download_Sentinel2_tile_grid" = true ]; then
+  PATH_DIR_S2_TILING_GRID=${PATH_FILE_S2_TILING_GRID%*$(basename $PATH_FILE_S2_TILING_GRID)}
+  mkdir -p $PATH_DIR_S2_TILING_GRID
+  wget "$SOURCE_S2_TILING_GRID" -P $PATH_DIR_S2_TILING_GRID
+  mv "$PATH_DIR_S2_TILING_GRID/$(basename $SOURCE_S2_TILING_GRID)" "$PATH_FILE_S2_TILING_GRID"
+fi
 
 echo
 echo "> +-------------------------------------"
@@ -317,10 +332,10 @@ conda create -n sen2_batch_processor -y python=3.6 \
 # development - was ahead of the default channels by
 # means of gdal version 2.3.1 (which is required by
 # the Sentinel-2 processing tools)
-conda config --add channels conda-forge
+conda config --add channels conda-forge # latest version of gdal
+conda config --add channels auto # multiprocessing
 conda install --name sen2_batch_processor -y --file requirements.txt
-
-
+pip install DateTime # not available (for linux) on conda currently
 
 rm -r $PATH_DIR_TMP
 
