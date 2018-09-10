@@ -45,8 +45,14 @@ if [ -f ${PATH_FILE_NETRC} ]; then
 	echo "  File '${PATH_FILE_NETRC}' already exists. That's OK. We'll update it here if necessary."
 else
 	echo "  File '${PATH_FILE_NETRC}' (.netrc file)"
-	echo "  does not exist. That's OK. It will be created and filled with login information for"
+	echo "  does not exist yet. That's OK. It will be created and filled with login information for"
 	echo "  'https://scihub.copernicus.eu/dhus' and 'http://code-de.org' in the following steps."
+	PATH_DIR_NETRC="${/"/$(basename $PATH_FILE_NETRC)"/}"
+	if ! [ -d "$PATH_DIR_NETRC" ]; then
+		echo "  Creating directory '$PATH_DIR_NETRC' ... "
+		mkdir -p $PATH_DIR_NETRC
+		echo "done."
+	fi
 fi
 
 for MACHINE in "scihub.copernicus.eu" "sso.eoc.dlr.de"; do
