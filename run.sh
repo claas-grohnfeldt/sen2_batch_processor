@@ -6,7 +6,6 @@
 # Description: 
 #   high-level interface to call various subroutines implemented in this toolbox
 #
-python3 testest.py
 
 script_name=$(basename -- "$0")
 echo "-----------------------------------"
@@ -28,14 +27,14 @@ function usage {
 #sen2cor=false
 #all=false
 #info=false
-parallel=1
+PARALLEL=1
 
 if [ "$#" -eq 0 ]; then
   echo "No program arguments specified."
   usage
   echo "Using default behaviour: --all (equivalent to --download --sen2cor)"
-  read -p "Do you wish to proceed? [y]es [n]o (dafault: [n]): " proceed
-  if [ "$proceed" = y ] || [ "$proceed" = yes ]; then
+  read -p "Do you wish to proceed? [y]es [n]o (dafault: [n]): " PROCEED
+  if [ "$PROCEED" = y ] || [ "$PROCEED" = yes ]; then
     echo "OK. proceeding.."
   else
     echo "No? OK. Abbording now."
@@ -45,13 +44,13 @@ fi
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -d|--download) download=true; shift 1;;
-    -u|--sen2cor)  sen2cor=true;  shift 1;;
-    -a|--all)      all=true;      shift 1;;
-    -p|--parallel) parallel="$2";   shift 2;;
-    -i|--info)     info=true;     shift 1;;
+    -d|--download) DOWNLOAD=true; shift 1;;
+    -u|--sen2cor)  SEN2COR=true;  shift 1;;
+    -a|--all)      ALL=true;      shift 1;;
+    -p|--parallel) PARALLEL="$2";   shift 2;;
+    -i|--info)     INFO=true;     shift 1;;
     -h|--help)     usage; exit;;
-    -p=*|--parallel=*) parallel="${1#*=}"; shift 1;;
+    -p=*|--parallel=*) PARALLEL="${1#*=}"; shift 1;;
     *) echo "ERROR: unknown option '$1'"; usage; exit 1; exit;;
   esac
 done
@@ -75,8 +74,8 @@ source activate $NAME_CONDA_ENVIRONMENT
 echo "-----------------------------"
 echo " downloading"
 echo "-----------------------------"
-if [ "$all" = true ] || [ "$download" = true ]; then
-	daylight_acquisitions_only=false
+if [ "$ALL" = true ] || [ "$DOWNLOAD" = true ]; then
+	DAYLIGHT_ACQUISITIONS_ONLY=false
 	bash $PATH_DIR_SRC/step3_download_via_codede.sh
 	echo 
 	echo " re-downloading ... "
@@ -87,12 +86,13 @@ fi
 echo "------------------------------------------"
 echo " sen2cor L1C -> L2A"
 echo "------------------------------------------"
-if [ "$all" = true ] || [ "$sen2cor" = true ]; then
+if [ "$ALL" = true ] || [ "$SEN2COR" = true ]; then
 	# preparation
 	bash $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor.sh
 	
-	# parllel processing
-	python3 $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor_parallel_wrapper.py
+	# parallel processing
+	PATH_FILE_L2A_PROCESS="${PATH_DIR_SEN2COR}/bin/L2A_Process"
+	python3 $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor_parallel_wrapper.py --parallel=$PARALLEL --file_L2A_Process=$PATH_FILE_L2A_PROCESS --file_source_list=$PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST --remove_L1C_SAFE_folder
 fi
 
 
