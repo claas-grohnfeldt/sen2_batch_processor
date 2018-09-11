@@ -48,6 +48,6 @@ NAME_CONDA_ENVIRONMENT="sen2_batch_processor"
 
 #--------------------------------------
 # TODO: remove all:
-path_to_base_dir=$PATH_DIR_MAIN
-path_to_src=$PATH_DIR_SRC
-path_to_target_dir_base="$PATH_DIR_DATA/sen2" 
+#path_to_base_dir=$PATH_DIR_MAIN
+# path_to_src=$PATH_DIR_SRC
+# path_to_target_dir_base="$PATH_DIR_DATA/sen2" 

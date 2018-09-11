@@ -11,12 +11,12 @@ printf "###############################################\n"
 . configure.sh
 
 parallel=1
-#path_to_target_dir_base="/home/ga39yoz/data/s2SR/LCZ42/data/sen2_kop"
+#PATH_DIR_DATA_SEN2="/home/ga39yoz/data/s2SR/LCZ42/data/sen2_kop"
 #curlOpts="--netrc -Lk --cookie-jar /tmp/t"
 curlOpts="--netrc-file $PATH_FILE_NETRC -Lk --cookie-jar /tmp/t"
 baseURLSciHub="https://scihub.copernicus.eu/dhus/odata/v1/Products"
 # require:
-# - path_to_target_dir_base
+# - PATH_DIR_DATA_SEN2
 # - curlOpts ( includes path_to_netrc)
 # - baseURLSciHub
 
@@ -30,7 +30,7 @@ while [ "$finished" = false ]; do
     printf "#--------------\n"
     printf "# ${attemptNo}. attempt..\n"
     printf "#--------------\n"
-    for s2fname in $path_to_target_dir_base/*/*/*/S2*.zip; do
+    for s2fname in $PATH_DIR_DATA_SEN2/*/*/*/S2*.zip; do
         printf "checking '$s2fname' ... "
         cd ${s2fname%/*}
         #s2fnameShort=${s2fname##*/}
@@ -83,7 +83,7 @@ if [[ $errorousDataNo > 0 ]]; then
     done	
 fi
 
-# path_to_target_dir_base="/home/ga39yoz/data/s2SR/LCZ42/sen2"
+# PATH_DIR_DATA_SEN2="/home/ga39yoz/data/s2SR/LCZ42/sen2"
 # noExec=''
 # curlOpts='--insecure --netrc-file /home/ga39yoz/data/s2SR/LCZ42/src/.netrc_code-de --location --cookie-jar /tmp/t'
 # batchSize=10
@@ -103,7 +103,7 @@ fi
 #     finished=true
 #     attemptNo=$((attemptNo + 1))
 #     printf "#--------------\n# ${attemptNo}. attempt..\n#--------------\n"
-#     for s2fname in $path_to_target_dir_base/*/*/*/S2*; do
+#     for s2fname in $PATH_DIR_DATA_SEN2/*/*/*/S2*; do
 #         cd ${s2fname%/*}
 #         s2fnameShort=${s2fname##*/}
 #         s2url="https://code-de.org/download/${s2fnameShort}"

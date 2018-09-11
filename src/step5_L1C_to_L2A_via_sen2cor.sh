@@ -258,12 +258,12 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 				printf "    to the list of L1C products to be processed via sen2cor ... "
 				echo "$PWD/$PATH_DIR_TILE_L1C" >> $PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST
 				echo "done."
-				echo "    Creating symbolic link "
-				echo "    '$PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST'"
-				echo "    to file "
-				echo "    '$PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST' ... "
-				ln -sf $PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST $PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST
-				echo "    done."
+				# echo "    Creating symbolic link "
+				# echo "    '$PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST'"
+				# echo "    to file "
+				# echo "    '$PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST' ... "
+				# ln -sf $PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST $PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST
+				# echo "    done."
 			else 
 				echo "    Warning: '$PATH_DIR_TILE_L1C' seems not to be complete .SAFE folder / Sentinel-2 product!"
 				echo "    This data cannot be processed. Skipping this tile."
@@ -274,6 +274,13 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 			fi
 		done
 		cd - > /dev/null
+		echo "    Creating symbolic link "
+                echo "    '$PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST'"
+                echo "    to file "
+                echo "    '$PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST' ... "
+                ln -sf $PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST $PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST
+                echo "    done."
+
 	else
 		echo "Error: No such directory: '${PATH_DIR_TILES}'"
 		echo "Abording now."

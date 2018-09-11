@@ -5,14 +5,6 @@ set -e
 # load paths
 . configure.sh
 
-# path_to_base_dir="/home/ga39yoz/data/s2SR/LCZ42"
-# path_to_src="${path_to_base_dir}/src"
-# path_to_CodeDE_query_download_script="${path_to_base_dir}/src/code-de-tools/bin/code-de-query-download.sh"
-# path_to_csv_file_ROIs="${path_to_base_dir}/ROIs/ROIs.csv"
-# path_to_Sentinel2_tiling_grid_kml_file="${path_to_base_dir}/aux/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml"
-# path_to_python_script_to_find_best_set_of_tiles="${path_to_base_dir}/src/find_best_set_of_unique_tiles.py"
-# path_to_target_dir_base="${path_to_base_dir}/data/sen2_kop"
-
 #parentIdentifier=EOP:CODE-DE:S1_SAR_L1_GRD
 parentIdentifier="EOP:CODE-DE:S2_MSI_L1C"
 
@@ -91,7 +83,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
     ROI_center_lat=$(echo "0.5*($lat_UL + $lat_LR)" | bc -i | sed -n '$,$p')
     ROI_center_lon=$(echo "0.5*($lon_UL + $lon_LR)" | bc -i | sed -n '$,$p')
 
-    path_to_target_dir="${path_to_target_dir_base}/${scene_name}/${season}/tiles"
+    path_to_target_dir="${PATH_DIR_DATA_SEN2}/${scene_name}/${season}/tiles"
     path_to_target_dir_aux="${path_to_target_dir}/aux"
 
     AOI=$(echo "$lon_UL,$lat_UL,$lon_LR,$lat_LR")
@@ -100,7 +92,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
     cd ${path_to_target_dir}
     
     # TODO: 4 lines added without testing
-    path_to_ROI="${path_to_target_dir_base}/${scene_name}/ROI.csv"
+    path_to_ROI="${PATH_DIR_DATA_SEN2}/${scene_name}/ROI.csv"
     if ! [ -f $path_to_ROI ]; then
         echo $line_latlon > $path_to_ROI
     fi
@@ -201,9 +193,9 @@ while read -r fullline || [[ -n "$fullline" ]]; do
             while IFS=', ' read -r missionIDTMP productLevelTMP sensingDateTMP sensingTimeTMP processingBaselineNumberTMP relativeOrbitNumberTMP tileIDTMP; do
                 #re-format from YYYYMMDD to YYYY-MM-DD
                 date_str="${sensingDateTMP:0:4}-${sensingDateTMP:4:2}-${sensingDateTMP:6:2}"
-                sunrise_sunset_time=$(bash $path_to_src/get_sunrise_sunset.sh $ROI_center_lon $ROI_center_lat $date_str)
+                sunrise_sunset_time=$(bash $PATH_DIR_SRC/get_sunrise_sunset.sh $ROI_center_lon $ROI_center_lat $date_str)
                 time_str="${sensingTime:0:2}:${sensingTimeTMP:2:2}"
-                is_daylight_acquisition=$(bash $path_to_src/check_if_time_in_range.sh $sunrise_sunset_time $time_str 30)
+                is_daylight_acquisition=$(bash $PATH_DIR_SRC/check_if_time_in_range.sh $sunrise_sunset_time $time_str 30)
                 if [[ "$is_daylight_acquisition" = true ]]; then
                     only_nighttime_acquisitions=false
                     break
@@ -214,11 +206,11 @@ while read -r fullline || [[ -n "$fullline" ]]; do
                 echo "         Since the parameter 'daylight_acquisitions_only'"
                 echo "         was set to 'true', this ROI is skipped entirely."
                 echo "         The parent folder"
-                echo "         ${path_to_target_dir_base}/${scene_name}"
+                echo "         ${PATH_DIR_DATA_SEN2}/${scene_name}"
                 echo "         will be moved to"
-                echo "         ${path_to_target_dir_base}/.scene_with_missing_daylight_acquisitions/${scene_name}"
-                mkdir -p "${path_to_target_dir_base}/.scene_with_missing_daylight_acquisitions"
-                mv "${path_to_target_dir_base}/${scene_name}" "${path_to_target_dir_base}/.scene_with_missing_daylight_acquisitions/${scene_name}"
+                echo "         ${PATH_DIR_DATA_SEN2}/.scene_with_missing_daylight_acquisitions/${scene_name}"
+                mkdir -p "${PATH_DIR_DATA_SEN2}/.scene_with_missing_daylight_acquisitions"
+                mv "${PATH_DIR_DATA_SEN2}/${scene_name}" "${PATH_DIR_DATA_SEN2}/.scene_with_missing_daylight_acquisitions/${scene_name}"
                 continue 2
             fi
         done
@@ -308,9 +300,9 @@ while read -r fullline || [[ -n "$fullline" ]]; do
                         if [ "$daylight_acquisitions_only" = true ]; then
                             #re-format from YYYYMMDD to YYYY-MM-DD
         			        date_str="${sensingDate:0:4}-${sensingDate:4:2}-${sensingDate:6:2}"
-                            sunrise_sunset_time=$(bash $path_to_src/get_sunrise_sunset.sh $ROI_center_lon $ROI_center_lat $date_str)
+                            sunrise_sunset_time=$(bash $PATH_DIR_SRC/get_sunrise_sunset.sh $ROI_center_lon $ROI_center_lat $date_str)
                             time_str="${sensingTime:0:2}:${sensingTime:2:2}"
-                            is_daylight_acquisition=$(bash $path_to_src/check_if_time_in_range.sh $sunrise_sunset_time $time_str 30)
+                            is_daylight_acquisition=$(bash $PATH_DIR_SRC/check_if_time_in_range.sh $sunrise_sunset_time $time_str 30)
                         else 
                             is_daylight_acquisition="true"
                         fi
@@ -339,11 +331,11 @@ while read -r fullline || [[ -n "$fullline" ]]; do
             printf "cloudCoverMaxPerc parameter, which was set to $cloudCoverMaxPerc. Because "
             printf "of this missing tile, the entire ROI will be skipped and the parent "
             printf "folder \n"
-            printf "${path_to_target_dir_base}/${scene_name}\n"
+            printf "${PATH_DIR_DATA_SEN2}/${scene_name}\n"
             printf "will be moved to \n"
-            mkdir -p "${path_to_target_dir_base}/.scene_with_missing_daylight_acquisitions"
-            printf "${path_to_target_dir_base}/.scene_with_missing_daylight_acquisitions/${scene_name}"
-            mv "${path_to_target_dir_base}/${scene_name}" "${path_to_target_dir_base}/.scene_with_missing_daylight_acquisitions/${scene_name}"
+            mkdir -p "${PATH_DIR_DATA_SEN2}/.scene_with_missing_daylight_acquisitions"
+            printf "${PATH_DIR_DATA_SEN2}/.scene_with_missing_daylight_acquisitions/${scene_name}"
+            mv "${PATH_DIR_DATA_SEN2}/${scene_name}" "${PATH_DIR_DATA_SEN2}/.scene_with_missing_daylight_acquisitions/${scene_name}"
             # skip all further tile IDs corresponding to this ROI and continue 
             # straight with the next ROI:
             continue 2
