@@ -335,7 +335,8 @@ conda create -n sen2_batch_processor -y python=3.6 \
 conda config --add channels conda-forge # latest version of gdal
 conda config --add channels auto # multiprocessing
 conda install --name sen2_batch_processor -y --file requirements.txt
-pip install DateTime # not available (for linux) on conda currently
+pip install msgpack  # required for DateTime
+pip install DateTime  # not available (for linux) on conda currently
 
 rm -r $PATH_DIR_TMP
 
