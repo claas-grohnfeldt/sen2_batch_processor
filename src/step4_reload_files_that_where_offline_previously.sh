@@ -12,7 +12,8 @@ printf "###############################################\n"
 
 parallel=1
 #path_to_target_dir_base="/home/ga39yoz/data/s2SR/LCZ42/data/sen2_kop"
-curlOpts="--netrc -Lk --cookie-jar /tmp/t"
+#curlOpts="--netrc -Lk --cookie-jar /tmp/t"
+curlOpts="--netrc-file $PATH_FILE_NETRC -Lk --cookie-jar /tmp/t"
 baseURLSciHub="https://scihub.copernicus.eu/dhus/odata/v1/Products"
 # require:
 # - path_to_target_dir_base
@@ -30,13 +31,15 @@ while [ "$finished" = false ]; do
     printf "# ${attemptNo}. attempt..\n"
     printf "#--------------\n"
     for s2fname in $path_to_target_dir_base/*/*/*/S2*.zip; do
-        du $s2fname
+        printf "checking '$s2fname' ... "
         cd ${s2fname%/*}
-        s2fnameShort=${s2fname##*/}
+        #s2fnameShort=${s2fname##*/}
+        s2fnameShort=$(basename $s2fname)
         s2fnameShortBody=${s2fnameShort%.SAFE.zip*}
         tmp=$(du $s2fname)
         filesize=$(echo "$tmp" | cut -f 1)
         if (($filesize < 10)); then
+	    echo "directory size <= 10 bytes. Doesn't contain data."
             #echo "file size is small: $filesize"
             filecontent=$(cat $s2fname)
             if [[ $filecontent = *"Request accepted"* ]]; then 
@@ -46,12 +49,14 @@ while [ "$finished" = false ]; do
                 finished=false
             elif [[ $filecontent = *"unavailable"* ]] || [[ $filecontent = *"failed"* ]]; then
                 printf "UNAVAILABLE on Code-DO -> Downloading via ESA Sci-Hub: $s2fname\n"
-                curl --netrc -o ${s2fnameShortBody}.xml -LkJO "https://scihub.copernicus.eu/dhus/odata/v1/Products?\$filter=substringof('${s2fnameShortBody}',Name)"
+                #curl --netrc -o ${s2fnameShortBody}.xml -LkJO "https://scihub.copernicus.eu/dhus/odata/v1/Products?\$filter=substringof('${s2fnameShortBody}',Name)"
+                curl --netrc-file $PATH_FILE_NETRC -o ${s2fnameShortBody}.xml -LkJO "https://scihub.copernicus.eu/dhus/odata/v1/Products?\$filter=substringof('${s2fnameShortBody}',Name)"
                 #curl --netrc -o ${s2fnameShortBody}.xml -LkJO "${baseURLSciHub}?\$filter=substringof('${s2fnameShortBody}',Name)"
                 tmpstr=$(cat ${s2fnameShortBody}.xml | sed -e 's/^.*<entry><id>'//)
                 myurl=${tmpstr%</id>*}
 				printf "downloading the following url: ${myurl}\n"
-				curl --netrc -LkJO "${myurl}/\$value"
+				#curl --netrc -LkJO "${myurl}/\$value"
+				curl --netrc-file $PATH_FILE_NETRC -LkJO "${myurl}/\$value"
                 rm ${s2fnameShortBody}.xml
                 mv ${s2fnameShortBody}.zip ${s2fnameShortBody}.SAFE.zip
             else
@@ -61,7 +66,9 @@ while [ "$finished" = false ]; do
                 errorDataList[errorousDataNo]=$s2fname
                 errorousDataNo=$(($errorousDataNo + 1))
             fi
-        fi
+        else
+		echo "directory size > 10 bytes. Seems OK."
+	fi
     done
     if [ "$finished" = false ]; then
         sleep 10
