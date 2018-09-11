@@ -24,7 +24,8 @@ daylight_acquisitions_only=false
 batchSize=999
 downloadParallel=2
 
-curlOpts="--netrc -Lk --cookie-jar /tmp/t"
+#curlOpts="--netrc -Lk --cookie-jar /tmp/t"
+curlOpts="--netrc-file $PATH_FILE_NETRC -Lk --cookie-jar /tmp/t"
 
 season="summer"
 # specify season time periods
