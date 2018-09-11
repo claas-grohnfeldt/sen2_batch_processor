@@ -7,15 +7,13 @@
 keep_L1C_zip_file=true
 keep_L1C_unzipped_SAFE_folder=false
 
+SEN2COR_PROCESS_ROIS_ONLY=true
+
 season="summer"
 
-#path_to_sen2cor="/home/ga39yoz/data/s2SR/LCZ42/src/sen2cor/Sen2Cor-02.05.05-Linux64/bin/L2A_Process"
 PATH_FILE_L2A_Process="${PATH_DIR_SEN2COR}/bin/L2A_Process"
-#PATH_DIR_DATA_SEN2="${PATH_DIR_DATA}/sen2"
-#PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST="$PATH_DIR_TMP/sen2core_to_be_processed.txt"
-PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST="${PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST%.txt}_$(date +%y%m%d_%H%M%S).txt"
 
-#path_to_target_dir_base="${PATH_DIR_MAIN}/data/sen2"
+PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST="${PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST%.txt}_$(date +%y%m%d_%H%M%S).txt"
 
 mode="interactive"
 #   =interactive
@@ -71,11 +69,24 @@ mkdir -p ${PATH_FILE_SEN2COR_TO_BE_PROCESSED_LIST/\/$(basename $PATH_FILE_SEN2CO
 for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 	echo
 	echo "***********************************************************************"
-	echo "* Processing scene:"
-	echo "* $PATH_SCENE"
-	echo "* Season:"
-	echo "* $season"
+	echo "* Scene:  '$PATH_SCENE'"
+	echo "* Season: '$season'"
 	echo "***********************************************************************"
+        tmpvar=$(grep "$(basename $PATH_SCENE)" $path_to_csv_file_ROIs); 
+	if [[ -z "${tmpvar// }" ]]; then
+		echo "  WARNING: Scene NOT listed in file '$path_to_csv_file_ROIs'."
+		if [ "$SEN2COR_PROCESS_ROIS_ONLY" = true ]; then
+			echo "           Since flag 'SEN2COR_PROCESS_ROIS_ONLY' is set to 'true'," 
+			echo "           this scene is skipped."
+			continue
+		else
+			echo "           Since flag 'SEN2COR_PROCESS_ROIS_ONLY' is NOT set to 'true',"
+			echo "           we will proceed with this scene."
+		fi
+	else
+		echo "  This scene is listed in '$path_to_csv_file_ROIs'."; 
+	fi
+
 	echo
 	PATH_DIR_TILES="${PATH_SCENE}/${season}/tiles"
 	if [ -d $PATH_DIR_TILES ]; then
@@ -94,8 +105,6 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 					echo "  # Tile/product: "
 					echo "  # $(basename $PATH_FILE_TILE_ZIP)"
 					echo "  #-------------------------------------------------------------------"
-					#skipL1CPruduct=false
-
 					# check if corresponding unzipped L1C product folder already exists in the directory
 					PATH_DIR_TILE_L1C=${PATH_FILE_TILE_ZIP%*.zip}
 					if [ -d $PATH_DIR_TILE_L1C ]; then
@@ -142,26 +151,6 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 					if [ "$(unzip -t $PATH_FILE_TILE_ZIP) | grep 'No errors detected in compressed data')" ]; then 
 						printf "all good.\n"
 						unzipIt="yes"
-						# if [ -d "${PATH_FILE_TILE_ZIP%*.zip}" ]; then 
-						# 	echo "    Directory already exists:"
-						# 	echo "    ${PATH_FILE_TILE_ZIP%*.zip}"
-						# 	echo
-						# 	unzipIt="no"
-						# 	#read -p "  > Would you like to proceed unzipping and overwrite existing data? (Y/N) [N]: " unzipIt
-						# 	if ! $unzipItAlways && ! $unzipItNever; then
-						# 		read -p "  > Would you like to proceed unzipping and OVERWRITE existing data? [y]es [n]o [A]lways [N]ever (default [n]): " unzipIt
-						# 		if ! [ $unzipIt ]; then 
-						# 			echo "    Using default value [n]"; 
-						# 			unzipIt="n"
-						# 		fi
-						# 		if [[ $unzipIt == A || $unzipIt == Always ]]; then
-						# 			unzipItAlways=true
-						# 		elif [[ $unzipIt == N || $unzipIt == Never ]]; then
-						# 			unzipItNever=true
-						# 		fi
-						# 	fi
-						# fi
-						# if ! ( [ -d "${PATH_FILE_TILE_ZIP%*.zip}" ] && $unzipItNever ) && ( $unzipItAlways || [[ $unzipIt == y || $unzipIt == yes ]] ); then
 						printf "    Unzipping ... "
 						unzip -oq $PATH_FILE_TILE_ZIP
 						echo "done."
@@ -205,22 +194,6 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 		echo "  + STEP 2: Iterating through L1C .SAFE data folders and create a list of L1C products"
 		echo "  +         to be processed (in parallel) via sen2cor to generate corresponding L2A data ..."
 		echo "  +++++++++"
-		# echo "  ##################################"
-		# echo "  # Sen2Cor processing .."
-		# echo "  ##################################"
-				
-		# ls *.zip
-		#pwd
-		#ls *L1C*.zip
-		#unzip *L1C*.zip
-		# for tileZip in $PATH_DIR_TILES/*.zip; do
-		# 	
-		# 	if ! [ -d ${tileZip##*.} ]; then
-		# 		unzip 
-		# 	fi
-		# done
-		
-		# for PATH_FILE_TILE_ZIP in *L1C*.SAFE.zip; do
 		for PATH_DIR_TILE_L1C in *MSIL1C_*.SAFE; do
 			echo
 			echo "    #-------------------------------------------------------------------"
