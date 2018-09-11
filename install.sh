@@ -48,7 +48,11 @@ else
 	echo "  File '${PATH_FILE_NETRC}' (.netrc file)"
 	echo "  does not exist yet. That's OK. It will be created and filled with login information for"
 	echo "  'https://scihub.copernicus.eu/dhus' and 'http://code-de.org' in the following steps."
-	PATH_DIR_NETRC="${/"/$(basename $PATH_FILE_NETRC)"/}"
+	#PATH_DIR_NETRC="${/"/$(basename $PATH_FILE_NETRC)"/}"
+    PATH_DIR_NETRC="${PATH_FILE_NETRC/"/$(basename $PATH_FILE_NETRC)"/}"
+    #echo $PATH_DIR_NETRC
+    #PATH_FILE_NETRC="/local_home/groh_cl/ssd2/Projects/sen2_batch_processor/authentication/.netrc";
+
 	if ! [ -d "$PATH_DIR_NETRC" ]; then
 		echo "  Creating directory '$PATH_DIR_NETRC' ... "
 		mkdir -p $PATH_DIR_NETRC
@@ -309,7 +313,7 @@ if [ -f $PATH_FILE_S2_TILING_GRID ]; then
   fi
 fi
 if [ "$download_Sentinel2_tile_grid" = true ]; then
-  PATH_DIR_S2_TILING_GRID=${PATH_FILE_S2_TILING_GRID%*$(basename $PATH_FILE_S2_TILING_GRID)}
+  PATH_DIR_S2_TILING_GRID=${PATH_FILE_S2_TILING_GRID%*/$(basename $PATH_FILE_S2_TILING_GRID)}
   mkdir -p $PATH_DIR_S2_TILING_GRID
   wget "$SOURCE_S2_TILING_GRID" -P $PATH_DIR_S2_TILING_GRID
   mv "$PATH_DIR_S2_TILING_GRID/$(basename $SOURCE_S2_TILING_GRID)" "$PATH_FILE_S2_TILING_GRID"
@@ -335,8 +339,8 @@ conda create -n sen2_batch_processor -y python=3.6 \
 conda config --add channels conda-forge # latest version of gdal
 conda config --add channels auto # multiprocessing
 conda install --name sen2_batch_processor -y --file requirements.txt
-pip install msgpack  # required for DateTime
-pip install DateTime  # not available (for linux) on conda currently
+pip3 install msgpack  # required for DateTime
+pip3 install DateTime  # not available (for linux) on conda currently
 
 rm -r $PATH_DIR_TMP
 
