@@ -1,4 +1,3 @@
-pip
 argparse
 numpy
 pandas
@@ -6,4 +5,4 @@ gdal
 imageio
 multiprocessing
 time
-
+pip3
