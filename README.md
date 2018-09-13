@@ -25,6 +25,22 @@ Developed for and tested on Linux systems only.
   as further described below)
 - **Sentinel-2 tiling grid** (available as kml file on the [ESA Sentinel-2 website](https://sentinel.esa.int/documents/247904/1955685/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml))
 
+- **Python-related**
+  - python (version >= 3.6)
+  - argparse
+  - numpy
+  - pandas
+  - gdal (version >= 2.3.1)
+  - imageio
+  - multiprocessing
+  - time
+  - pip3
+  
+- **linux-related**
+  - perl
+  - wget
+  - curl
+
 ## Authentification
 For each data download from Code-DE or Copernicus-SciHub, your credentials (user name and password) corresponding to the respective account must be provided. One way of doing so, which is the way recommended to be used with this toolbox, is to save those credentials in a ```~/.netrc``` file stored in your home directory. This file must contain the following lines:
 ```
