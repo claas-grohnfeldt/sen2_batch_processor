@@ -338,7 +338,7 @@ conda create -n sen2_batch_processor -y python=3.6 \
 # the Sentinel-2 processing tools)
 conda config --add channels conda-forge # latest version of gdal
 conda config --add channels auto # multiprocessing
-conda install --name sen2_batch_processor -y --file requirements.txt
+conda install --name sen2_batch_processor --file requirements.txt
 pip3 install msgpack  # required for DateTime
 pip3 install DateTime  # not available (for linux) on conda currently
 
@@ -349,9 +349,9 @@ rm -r $PATH_DIR_TMP
 
 
 echo
-echo "  Installation completed successfully."
+echo "  Installation completed. Please check the above output carefully for errors."
 echo 
-echo "  Congratilations! The hard part is over! "
+#echo "  Congratilations! The hard part is over! "
 
-echo "  Enjoy using the Sentinel-2 batch download/processing toolbox."
+#echo "  Enjoy using the Sentinel-2 batch download/processing toolbox."
 echo
