@@ -279,7 +279,7 @@ if $INSTALL_CODE_DE_TOOLS; then
 	echo "  Downloading and installing 'code_de_tools' now."
 	echo
 	echo "===>"
-	git clone https://github.com/dlr-eoc/code-de-tools.git $PATH_DIR_CODE_DE_TOOLS
+	git clone $SOURCE_CODE_DE_TOOLS_GIT $PATH_DIR_CODE_DE_TOOLS
 	echo "<=== DONE"
 	
 fi
@@ -315,7 +315,7 @@ fi
 if [ "$download_Sentinel2_tile_grid" = true ]; then
   PATH_DIR_S2_TILING_GRID=${PATH_FILE_S2_TILING_GRID%*/$(basename $PATH_FILE_S2_TILING_GRID)}
   mkdir -p $PATH_DIR_S2_TILING_GRID
-  wget "$SOURCE_S2_TILING_GRID" -P $PATH_DIR_S2_TILING_GRID
+  wget --no-check-certificate "$SOURCE_S2_TILING_GRID" -P $PATH_DIR_S2_TILING_GRID
   mv "$PATH_DIR_S2_TILING_GRID/$(basename $SOURCE_S2_TILING_GRID)" "$PATH_FILE_S2_TILING_GRID"
 fi
 
@@ -339,9 +339,10 @@ conda create -n sen2_batch_processor -y python=3.6 \
 conda config --add channels conda-forge # latest version of gdal
 conda config --add channels auto # multiprocessing
 conda install --name sen2_batch_processor --file requirements.txt
-pip3 install msgpack  # required for DateTime
-pip3 install DateTime  # not available (for linux) on conda currently
-
+source activate $NAME_CONDA_ENVIRONMENT
+pip install msgpack  # required for DateTime
+pip install DateTime  # not available (for linux) on conda currently
+source deactivate
 rm -r $PATH_DIR_TMP
 
 # activate conda environment

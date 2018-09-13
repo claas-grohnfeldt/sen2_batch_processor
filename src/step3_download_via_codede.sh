@@ -7,6 +7,7 @@ set -e
 
 #parentIdentifier=EOP:CODE-DE:S1_SAR_L1_GRD
 parentIdentifier="EOP:CODE-DE:S2_MSI_L1C"
+#parentIdentifier="EOP:CODE-DE:S2_MSI_L2A"
 
 cloudCoverMinPerc=0
 cloudCoverMaxPerc=100
