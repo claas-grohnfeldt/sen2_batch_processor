@@ -329,8 +329,9 @@ echo "  +-------------------------------------"
 # named "sen2_batch_processor" without asking for 
 # confirmation. Package version takes precedence 
 # over channel prior. Lastly, update dependencies.
-conda create -n sen2_batch_processor -y python=3.6 \
-             --no-channel-priority --update-deps
+#conda create -n sen2_batch_processor -y python=3.6 \
+#             --no-channel-priority --update-deps
+conda create -n $NAME_CONDA_ENVIRONMENT python=3
 
 # Add conda channel conda-forge, which - at the time of
 # development - was ahead of the default channels by
@@ -338,7 +339,7 @@ conda create -n sen2_batch_processor -y python=3.6 \
 # the Sentinel-2 processing tools)
 conda config --add channels conda-forge # latest version of gdal
 conda config --add channels auto # multiprocessing
-conda install --name sen2_batch_processor --file requirements.txt
+conda install --n $NAME_CONDA_ENVIRONMENT --file requirements.txt
 source activate $NAME_CONDA_ENVIRONMENT
 pip install msgpack  # required for DateTime
 pip install DateTime  # not available (for linux) on conda currently

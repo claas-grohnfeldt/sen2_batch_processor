@@ -1,6 +1,4 @@
 numpy
 pandas
-gdal
+gdal=2.3
 imageio
-multiprocessing
-time
