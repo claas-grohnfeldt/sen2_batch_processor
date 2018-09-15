@@ -327,7 +327,7 @@ conda create -n $NAME_CONDA_ENVIRONMENT python=3
 # the Sentinel-2 processing tools)
 conda config --add channels conda-forge # latest version of gdal
 conda config --add channels auto # multiprocessing
-conda install --n $NAME_CONDA_ENVIRONMENT --file requirements.txt
+conda install -n $NAME_CONDA_ENVIRONMENT --file requirements.txt
 source activate $NAME_CONDA_ENVIRONMENT
 pip install msgpack  # required for DateTime
 pip install DateTime  # not available (for linux) on conda currently
