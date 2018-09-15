@@ -6,6 +6,8 @@
 mkdir -p $PATH_DIR_TMP
 mkdir -p $PATH_DIR_SEN2COR
 
+# test comment
+
 echo
 echo "#####################################################################################"
 echo "# This script is to install the 'sen2_batch_processor' toolbox and its dependencies."
