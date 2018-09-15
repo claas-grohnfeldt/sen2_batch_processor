@@ -3,12 +3,6 @@
 # load paths and preferences
 . configure.sh
 
-# PATH_DIR_MAIN=$(pwd)
-# PATH_DIR_TMP="${PATH_DIR_MAIN}/tmp"
-# PATH_DIR_SEN2COR="${PATH_DIR_MAIN}/src/thirdparties/sen2cor"
-# PATH_DIR_CODE_DE_TOOLS="${PATH_DIR_MAIN}/src/thirdparties/code-de-tools"
-# PATH_FILE_NETRC=${HOME}/.netrc
-
 mkdir -p $PATH_DIR_TMP
 mkdir -p $PATH_DIR_SEN2COR
 
@@ -48,10 +42,7 @@ else
 	echo "  File '${PATH_FILE_NETRC}' (.netrc file)"
 	echo "  does not exist yet. That's OK. It will be created and filled with login information for"
 	echo "  'https://scihub.copernicus.eu/dhus' and 'http://code-de.org' in the following steps."
-	#PATH_DIR_NETRC="${/"/$(basename $PATH_FILE_NETRC)"/}"
     PATH_DIR_NETRC="${PATH_FILE_NETRC/"/$(basename $PATH_FILE_NETRC)"/}"
-    #echo $PATH_DIR_NETRC
-    #PATH_FILE_NETRC="/local_home/groh_cl/ssd2/Projects/sen2_batch_processor/authentication/.netrc";
 
 	if ! [ -d "$PATH_DIR_NETRC" ]; then
 		echo "  Creating directory '$PATH_DIR_NETRC' ... "
@@ -190,10 +181,7 @@ if $INSTALL_SEN2COR; then
 	echo "  Downloading and installing sen2cor now."
 	echo
 	echo "===>"
-	#SOURCE_SEN2COR="http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run"
-	#wget 'http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run' -P $PATH_DIR_TMP
 	wget "$SOURCE_SEN2COR" -P $PATH_DIR_TMP
-	#bash "${PATH_DIR_TMP}/Sen2Cor-02.05.05-Linux64.run" --target "${PATH_DIR_SEN2COR}"
 	bash "${PATH_DIR_TMP}/$(basename $SOURCE_SEN2COR)" --target "${PATH_DIR_SEN2COR}"
 	PATH_FILE_L2A_Process="${PATH_DIR_SEN2COR}/bin/L2A_Process"
 	echo "<=== DONE"
@@ -346,38 +334,6 @@ pip install DateTime  # not available (for linux) on conda currently
 source deactivate
 rm -r $PATH_DIR_TMP
 
-# activate conda environment
-#source activate $NAME_CONDA_ENVIRONMENT
-
-
 echo
 echo "  Installation completed. Please check the above output carefully for errors."
 echo 
-#echo "  Congratilations! The hard part is over! "
-echo "  hello kitty dataset"
-echo "  hello kitty dataset"
-echo "  hello kitty dataset"
-echo "  hello kitty dataset"
-echo "  hello kitty dataset"
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-# kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop kop
-#echo "  Enjoy using the Sentinel-2 batch download/processing toolbox."
-echo
