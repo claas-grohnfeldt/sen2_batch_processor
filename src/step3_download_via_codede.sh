@@ -37,9 +37,9 @@ elif [ "$season" = "summer" ]; then
 fi
 
 # make sure that code-de download script is available at location specified in 'configure.sh'
-if ! [ -f $path_to_CodeDE_query_download_script ]; then
+if ! [ -f $PATH_FILE_CodeDE_query_download ]; then
    echo "code-de download script does not exist at location specified in 'configure.sh':"
-   echo "$path_to_CodeDE_query_download_script ('no such file exists in file system')"
+   echo "$PATH_FILE_CodeDE_query_download ('no such file exists in file system')"
    echo "Forgot to run 'bash install.sh'? Or changed folder structure since running 'bash install.sh'?"
    echo "Abording now."
    exit 1
@@ -123,7 +123,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
 	CONSTRAINTS=$(echo "parentIdentifier=${parentIdentifier}&startDate=${startDate}&endDate=${endDate}&bbox=${AOI}&maximumRecords=${batchSize}&cloudCover=\[0,${cloudCoverMaxPerc}\]")
 	echo "- query contraints:"
 	echo ${CONSTRAINTS}
-	queryOut=$($path_to_CodeDE_query_download_script -c "${CONSTRAINTS}" --noTransfer)
+	queryOut=$($PATH_FILE_CodeDE_query_download -c "${CONSTRAINTS}" --noTransfer)
 
 	# The following code assumes the following sentinel procuct file naming convention:
 	# MMM_MSIL1C_YYYYMMDDHHMMSS_Nxxyy_ROOO_Txxxxx_<Product Discriminator>.SAFE
@@ -231,7 +231,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
     > adjacency_lists.csv
     maxNumDates=0
 	for tileID in "${uniqueTileIDs[@]}"; do
-		tmptxt=$(grep -A 30 "<name>$tileID</name>" $path_to_Sentinel2_tiling_grid_kml_file)
+		tmptxt=$(grep -A 30 "<name>$tileID</name>" $PATH_FILE_Sentinel2_tiling_grid_kml)
 		tmptxt=${tmptxt#*Point>}
 		tmptxt=${tmptxt#*coordinates>}
 		tmptxt=${tmptxt%</Point>*}
@@ -256,7 +256,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
 			cloudCoverMaxPercTmp=$[$cloudCoverMaxPercTmp+1]
 			echo "searching for products with cloudCoverMax = $cloudCoverMaxPercTmp .."
 			CONSTRAINTS_tmp=$(echo "parentIdentifier=${parentIdentifier}&startDate=${startDate}&endDate=${endDate}&bbox=${AOI_cur_tile}&maximumRecords=${batchSize}&cloudCover=\[${cloudCoverMinPerc},${cloudCoverMaxPercTmp}\]")
-			queryOutTMP=$($path_to_CodeDE_query_download_script -c "${CONSTRAINTS_tmp}" --noTransfer 2> /dev/null) 
+			queryOutTMP=$($PATH_FILE_CodeDE_query_download -c "${CONSTRAINTS_tmp}" --noTransfer 2> /dev/null) 
 
             if [[ $queryOutTMP = *"_T${tileID}_"* ]]; then
                 queryOutTMP=${queryOutTMP#*downloading...}
@@ -361,7 +361,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
     echo "1.5)  Find best set of unique tiles"
     echo "----------------------------------------------------------------------------"
 
-    python3 ${path_to_python_script_to_find_best_set_of_tiles} ${path_to_target_dir} ${maxNumDates}
+    python3 ${PATH_FILE_python_script_find_best_tiles} ${path_to_target_dir} ${maxNumDates}
 	
     echo
 	echo "----------------------------------------------------------------------------"
@@ -380,7 +380,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
 		AOI_cur_tile=$(echo "$lon_UL_tmp,$lat_UL_tmp,$lon_LR_tmp,$lat_LR_tmp")
 		CONSTRAINTS_tmp=$(echo "parentIdentifier=${parentIdentifier}&startDate=${startDateTmp}&endDate=${endDateTmp}&bbox=${AOI_cur_tile}&maximumRecords=${batchSize}&cloudCover=\[${cloudCoverMinPerc},${cloudCoverMaxTmp}\]")
 
-		queryOutTMP=$($path_to_CodeDE_query_download_script -c "${CONSTRAINTS_tmp}" --noTransfer 2> /dev/null) 
+		queryOutTMP=$($PATH_FILE_CodeDE_query_download -c "${CONSTRAINTS_tmp}" --noTransfer 2> /dev/null) 
 		queryOutTMP=${queryOutTMP#*downloading...}
     	D="curl -O " # multi-character delimiter
     	#Split the String into Substrings
@@ -389,7 +389,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
         cd $tileID
         echo 
         echo RUNNING THE FOLLOWING COMMANDs FOR DOWNLOADING:
-        $path_to_CodeDE_query_download_script -c "${CONSTRAINTS_tmp}" -o "$curlOpts" -l=2
+        $PATH_FILE_CodeDE_query_download -c "${CONSTRAINTS_tmp}" -o "$curlOpts" -l=2
         lsout=$(ls)
         lsList=($(echo $lsout | sed -e 's/ /\n/g' | while read lsline; do echo $lsline; done))
         echo "keeping only the following file:"
@@ -411,7 +411,7 @@ while read -r fullline || [[ -n "$fullline" ]]; do
     echo "********"
 	echo
     exec >/dev/tty
-done < "$path_to_csv_file_ROIs"
+done < "$PATH_FILE_ROIs"
 
 echo "*********************"
 echo "*     All done      *"

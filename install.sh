@@ -14,8 +14,6 @@ echo "# This script is to install the 'sen2_batch_processor' toolbox and its dep
 echo "# Please follow these instructions very carefully."
 echo "#####################################################################################"
 
-# new requirement: perl TODO
-
 echo
 echo "  This toolbox requires you to possess valid user credentials on both"
 echo "  ----->  'https://scihub.copernicus.eu/dhus' (machine: scihub.copernicus.eu) <------"

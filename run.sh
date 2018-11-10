@@ -22,11 +22,7 @@ function usage {
   #exit 1;
 }
 
-#defaults
-#download=false
-#sen2cor=false
-#all=false
-#info=false
+# required (init):
 PARALLEL=1
 
 if [ "$#" -eq 0 ]; then
@@ -58,23 +54,13 @@ done
 # load paths and preferences
 . configure.sh
 
-#gdalinfo --version
 # activate conda environment
 source activate $NAME_CONDA_ENVIRONMENT
-#gdalinfo --version
 
-# echo "------------>"
-# echo $download
-# echo $sen2cor
-# echo $all
-# echo $parallel
-# echo $info
-# echo "<------------"
-
-echo "-----------------------------"
-echo " downloading"
-echo "-----------------------------"
 if [ "$ALL" = true ] || [ "$DOWNLOAD" = true ]; then
+    echo "-----------------------------"
+    echo " downloading"
+    echo "-----------------------------"
 	DAYLIGHT_ACQUISITIONS_ONLY=false
 	bash $PATH_DIR_SRC/step3_download_via_codede.sh
 	echo 
@@ -83,10 +69,10 @@ if [ "$ALL" = true ] || [ "$DOWNLOAD" = true ]; then
 	echo "done."
 fi
 
-echo "------------------------------------------"
-echo " sen2cor L1C -> L2A"
-echo "------------------------------------------"
 if [ "$ALL" = true ] || [ "$SEN2COR" = true ]; then
+    echo "------------------------------------------"
+    echo " sen2cor L1C -> L2A"
+    echo "------------------------------------------"
 	# preparation
 	bash $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor.sh
 	
@@ -97,4 +83,3 @@ fi
 
 
 conda deactivate
-#gdalinfo --version

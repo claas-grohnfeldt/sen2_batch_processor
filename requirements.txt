@@ -1,4 +1,4 @@
+gdal
 numpy
 pandas
-gdal=2.3
 imageio

@@ -72,9 +72,9 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 	echo "* Scene:  '$PATH_SCENE'"
 	echo "* Season: '$season'"
 	echo "***********************************************************************"
-        tmpvar=$(grep "$(basename $PATH_SCENE)" $path_to_csv_file_ROIs); 
+        tmpvar=$(grep "$(basename $PATH_SCENE)" $PATH_FILE_ROIs); 
 	if [[ -z "${tmpvar// }" ]]; then
-		echo "  WARNING: Scene NOT listed in file '$path_to_csv_file_ROIs'."
+		echo "  WARNING: Scene NOT listed in file '$PATH_FILE_ROIs'."
 		if [ "$SEN2COR_PROCESS_ROIS_ONLY" = true ]; then
 			echo "           Since flag 'SEN2COR_PROCESS_ROIS_ONLY' is set to 'true'," 
 			echo "           this scene is skipped."
@@ -84,7 +84,7 @@ for PATH_SCENE in ${PATH_DIR_DATA_SEN2}/*; do
 			echo "           we will proceed with this scene."
 		fi
 	else
-		echo "  This scene is listed in '$path_to_csv_file_ROIs'."; 
+		echo "  This scene is listed in '$PATH_FILE_ROIs'."; 
 	fi
 
 	echo
