@@ -12,7 +12,8 @@ Developed for and tested on Linux systems only.
   - Copernicus Open Access Hub: https://scihub.copernicus.eu/dhus/#/self-registration
   - CODE-DE site: https://code-de.org/dhus/#/self-registration
 - **code-de-tools** (available on [this GitHub site](https://github.com/dlr-eoc/code-de-tools))
-
+- anconda3
+- perl
 - **gdal** (version >= 2.3.1; use standard system installation procedure or download from [www.gdal.org](https://www.gdal.org/))
 - **sen2cor** (Sentinle-2 atmospheric correction: generates Level 2A from Level 1C products)
     - download standalone installer ```Sen2Cor-XX.XX.XX-Linux64.run``` of the latest release (version >= 2.5.5) from the [official ESA sen2cor
