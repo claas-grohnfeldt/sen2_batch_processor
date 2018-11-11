@@ -2,3 +2,7 @@ gdal
 numpy
 pandas
 imageio
+h5py
+matplotlib
+keras
+scikit-image

@@ -332,6 +332,21 @@ source activate $NAME_CONDA_ENVIRONMENT
 pip install msgpack  # required for DateTime
 pip install DateTime  # not available (for linux) on conda currently
 source deactivate
+
+echo
+echo "> +-------------------------------------"
+echo "  | Download DSen2 (Super-Resolution of "
+echo "  | Sentinel-2 Images: Learning a Globally "
+echo "  | Applicable Deep Neural Network)"
+echo "  | by Lanaras et al."
+echo "  +-------------------------------------"
+mkdir -p $PATH_DIR_DSEN2
+PATH_FILE_DSEN2_TMP="${PATH_DIR_TMP}/tmp/DSen2.zip"
+wget -O $PATH_FILE_DSEN2_TMP $SOURCE_DSEN2
+unzip $PATH_FILE_DSEN2_TMP -d "${PATH_DIR_DSEN2}/.."
+mv "${PATH_DIR_DSEN2}/../DSen2-master" ${PATH_DIR_DSEN2}
+
+
 rm -r $PATH_DIR_TMP
 
 echo
