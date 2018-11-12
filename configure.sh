@@ -25,16 +25,19 @@ PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST="$PATH_DIR_TMP/sen2cor_to_be_processed.tx
 #----------------------
 PATH_DIR_SRC="$PATH_DIR_MAIN/src"
 PATH_FILE_python_script_find_best_tiles="$PATH_DIR_SRC/find_best_set_of_unique_tiles.py"
+
+#---- THIRDPARTIES ----
+PATH_DIR_SRC_3RDPARTIES="$PATH_DIR_SRC/thirdparties"
 # CODE-DE
 SOURCE_CODE_DE_TOOLS_GIT="https://github.com/dlr-eoc/code-de-tools.git"
-PATH_DIR_CODE_DE_TOOLS="$PATH_DIR_SRC/thirdparties/code-de-tools"
+PATH_DIR_CODE_DE_TOOLS="$PATH_DIR_SRC_3RDPARTIES/code-de-tools"
 PATH_FILE_CodeDE_query_download="$PATH_DIR_CODE_DE_TOOLS/bin/code-de-query-download.sh"
 # Sen2Cor
 SOURCE_SEN2COR="http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run"
-PATH_DIR_SEN2COR="$PATH_DIR_SRC/thirdparties/sen2cor"
+PATH_DIR_SEN2COR="$PATH_DIR_SRC_3RDPARTIES/sen2cor"
 # Deep Sentinel-2
 SOURCE_DSen2="https://github.com/lanha/DSen2/archive/master.zip"
-PATH_DIR_DSEN2="$PATH_DIR_SRC/thirdparties/DSen2"
+PATH_DIR_DSEN2="$PATH_DIR_SRC_3RDPARTIES/DSen2"
 
 #----------------------
 # auxiliary files
