@@ -80,7 +80,7 @@ for MACHINE in "scihub.copernicus.eu" "sso.eoc.dlr.de"; do
 				exit
 			fi
 			perl -i.original -0400 -pe "s/machine ${MACHINE}(.*?)\n(.*?)login(.*?)\n(.*?)password(.*?)\n/machine ${MACHINE}\n    login ${USRNAME_TMP}\n    password ${PWD_TMP}\n/igs" ${PATH_FILE_NETRC}
-			echo "  Successfully updated user accout credentials for machine '${MACHINE}' in '${PATH_FILE_NETRC}'."
+			echo "  Successfully updated user account credentials for machine '${MACHINE}' in '${PATH_FILE_NETRC}'."
 			unset PWD_TMP
 			unset PWD_TMP_validate
 		fi
@@ -108,6 +108,8 @@ for MACHINE in "scihub.copernicus.eu" "sso.eoc.dlr.de"; do
 		echo "machine ${MACHINE}" >> ${PATH_FILE_NETRC}
 		echo "    login ${USRNAME_TMP}" >> ${PATH_FILE_NETRC}
 		echo "    password ${PWD_TMP}" >> ${PATH_FILE_NETRC}
+        echo "  Excellent, passwords matched!"
+        echo "  Successfully added user account credentials for machine '${MACHINE}' in '${PATH_FILE_NETRC}'."
 	fi
 done
 chmod 400 ${PATH_FILE_NETRC}
@@ -273,14 +275,6 @@ if $INSTALL_CODE_DE_TOOLS; then
 fi
 echo
 echo "  Great. Code-DE-Tools is good to go."
-
-echo
-echo "  +-------------------------------------"
-echo "  | Setting up SuperRes"
-echo "  +-------------------------------------"
-# # download superres code
-echo "... to be done ..."
-# # TODO
 
 echo
 echo "  +-------------------------------------"

@@ -36,7 +36,7 @@ PATH_FILE_CodeDE_query_download="$PATH_DIR_CODE_DE_TOOLS/bin/code-de-query-downl
 SOURCE_SEN2COR="http://step.esa.int/thirdparties/sen2cor/2.5.5/Sen2Cor-02.05.05-Linux64.run"
 PATH_DIR_SEN2COR="$PATH_DIR_SRC_3RDPARTIES/sen2cor"
 # Deep Sentinel-2
-SOURCE_DSen2="https://github.com/lanha/DSen2/archive/master.zip"
+SOURCE_DSEN2="https://github.com/lanha/DSen2/archive/master.zip"
 PATH_DIR_DSEN2="$PATH_DIR_SRC_3RDPARTIES/DSen2"
 
 #----------------------
