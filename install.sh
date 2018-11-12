@@ -336,9 +336,14 @@ mkdir -p $PATH_DIR_DSEN2
 PATH_FILE_DSEN2_TMP="$PATH_DIR_TMP/DSen2.zip"
 wget -O $PATH_FILE_DSEN2_TMP $SOURCE_DSEN2
 unzip $PATH_FILE_DSEN2_TMP -d "$PATH_DIR_DSEN2/.."
-mv $PATH_DIR_DSEN2/../DSen2-master/* $PATH_DIR_DSEN2
+rsync -a $PATH_DIR_DSEN2/../DSen2-master/* $PATH_DIR_DSEN2
 rm -r "$PATH_DIR_DSEN2/../DSen2-master"
 
+echo "  **** fixing but in the file:"
+echo "  **** $PATH_DIR_DSEN2/testing/s2_tiles_supres.py"
+# BUG FIX:
+echo $PATH_DIR_DSEN2/testing/s2_tiles_supres.py | xargs sed -i 's/result_dataset = driver.Create(output_file, data10.shape\[1\], data10.shape\[0\], out_dims, gdal.GDT_Float64)/result_dataset = driver.Create(output_file, xsize=data10.shape[0], ysize=data10.shape[1], bands=out_dims, eType=gdal.GDT_Float64)/g'
+echo "  done!"
 
 rm -r $PATH_DIR_TMP
 
