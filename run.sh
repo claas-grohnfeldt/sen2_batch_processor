@@ -16,6 +16,7 @@ function usage {
   echo "$0 [-d|--download] [-s|--sen2cor] [-p|parallel=1] [-a|--all] [-i|--info]"
   echo "  -d, --download    download Sentinel-2 data"
   echo "  -s, --sen2cor     convert L1C to L2A products via sen2cor"
+  echo "  -r, --superres    super-resolve 20m (and optionally also 60m) bands to 10m GSD"
   echo "  -a, --all         process all. Same as --download --sen2cor"
   echo "  -p, --parallel    number of cores used for processing"
   echo "  -i, --info        print information about ROIs, paths and settings"
@@ -41,7 +42,8 @@ fi
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -d|--download) DOWNLOAD=true; shift 1;;
-    -u|--sen2cor)  SEN2COR=true;  shift 1;;
+    -s|--sen2cor)  SEN2COR=true;  shift 1;;
+    -r|--superres) SUPERRES=true;  shift 1;;
     -a|--all)      ALL=true;      shift 1;;
     -p|--parallel) PARALLEL="$2";   shift 2;;
     -i|--info)     INFO=true;     shift 1;;
@@ -81,7 +83,7 @@ if [ "$ALL" = true ] || [ "$SEN2COR" = true ]; then
 	python3 $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor_parallel_wrapper.py --parallel=$PARALLEL --file_L2A_Process=$PATH_FILE_L2A_PROCESS --file_source_list=$PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST --remove_L1C_SAFE_folder
 fi
 
-if [ "$ALL" = true ] || [ "$DSEN2" = true ]; then
+if [ "$ALL" = true ] || [ "$SUPERRES" = true ]; then
     echo "------------------------------------------"
     echo " DSEN2: Deep learning-based Sentinel-2 super-resolution. "
     echo "------------------------------------------"
