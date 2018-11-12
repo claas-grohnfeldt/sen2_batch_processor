@@ -30,7 +30,7 @@ while [ "$finished" = false ]; do
     printf "#--------------\n"
     printf "# ${attemptNo}. attempt..\n"
     printf "#--------------\n"
-    for s2fname in $PATH_DIR_DATA_SEN2/*/*/tiles/*/S2*.zip; do
+    for s2fname in $PATH_DIR_DATA_SEN2/*/*/tiles/S2*.zip; do
         printf "checking '$s2fname' ... "
         cd ${s2fname%/*}
         #s2fnameShort=${s2fname##*/}

@@ -81,5 +81,13 @@ if [ "$ALL" = true ] || [ "$SEN2COR" = true ]; then
 	python3 $PATH_DIR_SRC/step5_L1C_to_L2A_via_sen2cor_parallel_wrapper.py --parallel=$PARALLEL --file_L2A_Process=$PATH_FILE_L2A_PROCESS --file_source_list=$PATH_LINK_SEN2COR_TO_BE_PROCESSED_LIST --remove_L1C_SAFE_folder
 fi
 
+if [ "$ALL" = true ] || [ "$DSEN2" = true ]; then
+    echo "------------------------------------------"
+    echo " DSEN2: Deep learning-based Sentinel-2 super-resolution. "
+    echo "------------------------------------------"
+    # preparation
+    bash $PATH_DIR_SRC/step6_superresolution_via_DSEN2.sh
+fi
+
 
 conda deactivate

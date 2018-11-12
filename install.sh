@@ -280,8 +280,6 @@ echo
 echo "  +-------------------------------------"
 echo "  | Download the Sentinel-2 tiling grid"
 echo "  +-------------------------------------"
-# # download superres code
-# # TODO
 download_Sentinel2_tile_grid=true
 if [ -f $PATH_FILE_S2_TILING_GRID ]; then
   echo "  File $PATH_FILE_S2_TILING_GRID"
@@ -338,7 +336,8 @@ mkdir -p $PATH_DIR_DSEN2
 PATH_FILE_DSEN2_TMP="$PATH_DIR_TMP/DSen2.zip"
 wget -O $PATH_FILE_DSEN2_TMP $SOURCE_DSEN2
 unzip $PATH_FILE_DSEN2_TMP -d "$PATH_DIR_DSEN2/.."
-mv "$PATH_DIR_DSEN2/../DSen2-master" $PATH_DIR_DSEN2
+mv "$PATH_DIR_DSEN2/../DSen2-master/*" $PATH_DIR_DSEN2
+rm -r "$PATH_DIR_DSEN2/../DSen2-master"
 
 
 rm -r $PATH_DIR_TMP
